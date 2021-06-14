@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-const BASEURL = 'https://api.pontuafidelidade.com.br/api'
+const BASEURL = 'https://api.pontuafidelidade.com.br/api';
 
 /**
  * Cliente HTTP com interceptor para adicionar o token às requisilções
@@ -24,7 +24,7 @@ export default class HttpClient {
      * Efetua uma requisição do tipo GET
      * @param url URL de destino da requisição
      */
-    public async get(url: string) {
+    async get(url: string) {
         return await this.client.get(url);
     }
 
@@ -33,7 +33,7 @@ export default class HttpClient {
      * @param url URL de destino da requisição
      * @param body Dados a serem enviados no corpo da requisição
      */
-    public async post(url: string, body = {}) {
+    async post(url: string, body = {}) {
         return await this.client.post(url, body);
     }
 
@@ -42,7 +42,7 @@ export default class HttpClient {
      * @param url URL de destino da requisição
      * @param body Dados a serem enviados no corpo da requisição
      */
-    public async put(url: string, body = {}) {
+    async put(url: string, body = {}) {
         return await this.client.put(url, body);
     }
 
@@ -51,7 +51,7 @@ export default class HttpClient {
      * @param url URL de destino da requisição
      * @param body Dados a serem enviados no corpo da requisição
      */
-    public async patch(url: string, body = {}) {
+    async patch(url: string, body = {}) {
         return await this.client.patch(url, body);
     }
 
@@ -59,28 +59,28 @@ export default class HttpClient {
      * Efetua uma requisição do tipo DELETE
      * @param url URL de destino da requisição
      */
-    public async delete(url: string) {
+    async delete(url: string) {
         return await this.client.delete(url);
     }
 
-    private configureInterceptors() {
+    configureInterceptors() {
         this.client.interceptors.request.use(
-            config => {
+            (config) => {
                 const token = this.getToken();
                 config.headers.common.Authorization = token ? token : null;
                 return config;
             },
-            error => {
+            (error) => {
                 return Promise.reject(error);
-            },
+            }
         );
-        this.client.interceptors.response.use(config => {
+        this.client.interceptors.response.use((config) => {
             return config;
         });
     }
 
     getToken(): string | null {
-        return localStorage.getItem('access_token') ? localStorage.getItem('access_token') : null
+        return localStorage.getItem('access_token') ? localStorage.getItem('access_token') : null;
     }
 }
 

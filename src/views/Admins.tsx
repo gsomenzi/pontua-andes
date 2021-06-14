@@ -2,12 +2,13 @@ import React from 'react';
 import BreadCrumbs from '../components/atoms/BreadCrumbs';
 import PageContainer from '../components/atoms/PageContainer';
 
-export default function Home() {
+const breadCrumbItems = [{ title: 'Administradores' }];
+
+export default function Admins() {
     return (
         <PageContainer padded hasSidebar>
-            <BreadCrumbs />
-            <h1>Dashboard</h1>
-            <hr className="mt-0" />
+            <BreadCrumbs items={breadCrumbItems} />
+            Administradores
         </PageContainer>
     );
 }

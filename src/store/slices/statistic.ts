@@ -1,22 +1,22 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import AuthService from '../../services/auth';
+import StatisticService from '../../services/statistic';
 
-type AuthState = {
-    authenticating: boolean;
-    access_token: string | null;
+type StatisticState = {
+    loading: boolean;
+    data: any;
     error: any;
 };
 
-const initialState: AuthState = {
-    access_token: null,
+const initialState: StatisticState = {
+    data: null,
     error: null,
-    authenticating: false,
+    loading: false,
 };
 
-export const signIn = createAsyncThunk('auth/signIn', async (payload: any, { rejectWithValue }) => {
+export const signIn = createAsyncThunk('statistic/signIn', async (payload: any, { rejectWithValue }) => {
     try {
         const { email, password } = payload;
-        const { data } = await AuthService.signIn(email, password);
+        const { data } = await StatisticService.getAll(email, password);
         AuthService.saveLocalToken(data.access_token);
         return data;
     } catch (e) {
@@ -25,18 +25,9 @@ export const signIn = createAsyncThunk('auth/signIn', async (payload: any, { rej
 });
 
 export const slice = createSlice({
-    name: 'auth',
+    name: 'statistic',
     initialState,
-    reducers: {
-        getLocalAccessToken: (state) => {
-            const token = localStorage.getItem('access_token') ? localStorage.getItem('access_token') : null;
-            state.access_token = token;
-        },
-        signOut: (state) => {
-            localStorage.clear();
-            state.access_token = null;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             // SIGNIN
