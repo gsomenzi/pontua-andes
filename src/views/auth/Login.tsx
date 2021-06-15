@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import { Card, CardBody } from 'reactstrap';
-import PageLoader from '../../components/molecules/PageLoader';
 import BackgroundImage from '../../components/atoms/BackgroundImage';
 import PageContainer from '../../components/atoms/PageContainer';
 import FormLogin from '../../components/organisms/Login/Form';

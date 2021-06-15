@@ -25,6 +25,9 @@ export default function HistoryChart(props: Props) {
             height: 350,
             type: 'line',
             stacked: false,
+            toolbar: {
+                show: false,
+            },
         },
         dataLabels: {
             enabled: false,
@@ -33,9 +36,7 @@ export default function HistoryChart(props: Props) {
             width: [1, 1, 4],
         },
         title: {
-            text: 'Histórico geral',
-            align: 'left',
-            offsetX: 12,
+            show: false,
         },
         xaxis: {
             categories: labels,
@@ -138,7 +139,7 @@ export default function HistoryChart(props: Props) {
     ];
     return (
         <div>
-            <Chart options={options} series={series} type="line" width="100%" height="350" />
+            <Chart options={options} series={series} type="line" width="100%" height={320} />
         </div>
     );
 }

@@ -28,7 +28,7 @@ export const slice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            // SIGNIN
+            // GETALL
             .addCase(getAll.pending, (state) => {
                 state.loading = true;
                 state.error = null;

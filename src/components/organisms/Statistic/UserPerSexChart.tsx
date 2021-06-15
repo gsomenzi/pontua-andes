@@ -37,9 +37,10 @@ export default function UserPerSexChart(props: Props) {
 
     const series = [
         {
+            name: 'Quantidade',
             data: values,
         },
     ];
 
-    return <div>{data ? <Chart options={options} series={series} type="bar" height={400} /> : null}</div>;
+    return <div>{data ? <Chart options={options} series={series} type="bar" height={280} /> : null}</div>;
 }

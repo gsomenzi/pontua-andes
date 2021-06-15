@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Button, Form as BootstrapForm, FormGroup, Label, Input, FormFeedback, Spinner } from 'reactstrap';
+import { Alert, Button, Form as BootstrapForm, FormGroup, Label, Input, FormFeedback, Spinner } from 'reactstrap';
 import './Form.scss';
 import { RootState } from '../../../store';
 import { signIn } from '../../../store/slices/auth';
@@ -14,7 +14,7 @@ const validationSchema = Yup.object().shape({
 
 export default function Form() {
     const dispatch = useDispatch();
-    const { authenticating } = useSelector((state: RootState) => state.auth);
+    const { authenticating, error } = useSelector((state: RootState) => state.auth);
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -72,6 +72,11 @@ export default function Form() {
                 >
                     Login
                 </Button>
+                {error ? (
+                    <Alert className="mt-2" color="danger">
+                        Usuário ou senha incorretos
+                    </Alert>
+                ) : null}
             </BootstrapForm>
         </div>
     );

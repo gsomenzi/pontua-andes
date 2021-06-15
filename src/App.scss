@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css');
 
 $primary: #57359d;
 $secondary: #f53f6f;
@@ -15,3 +15,20 @@ $font-family-sans-serif: 'Open Sans', sans-serif;
 @import './styles/components/PageContainer.scss';
 @import './styles/components/PageLoader.scss';
 @import './styles/components/Sidebar.scss';
+
+// GLOBAL
+
+.text-nowrap {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.text-right {
+    text-align: right;
+}
+
+td.compact {
+    width: 1px;
+    white-space: nowrap;
+}

@@ -11,7 +11,6 @@ export default function UserPerAgeChart(props: Props) {
     const [values, setValues] = useState([0]);
 
     useEffect(() => {
-        console.log(data);
         setLabels(data && data.usuarios ? data.usuarios.por_faixa_etaria.map((e) => e.faixa || 'Não informado') : []);
         setValues(data && data.usuarios ? data.usuarios.por_faixa_etaria.map((e) => parseInt(e.quantidade)) : []);
     }, [data]);
@@ -38,9 +37,10 @@ export default function UserPerAgeChart(props: Props) {
 
     const series = [
         {
+            name: 'Quantidade',
             data: values,
         },
     ];
 
-    return <div>{data ? <Chart options={options} series={series} type="bar" height={400} /> : null}</div>;
+    return <div>{data ? <Chart options={options} series={series} type="bar" height={280} /> : null}</div>;
 }

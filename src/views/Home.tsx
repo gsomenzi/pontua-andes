@@ -1,44 +1,110 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardBody } from 'reactstrap';
+import { Card, CardHeader, CardTitle, CardBody, Spinner } from 'reactstrap';
 import BreadCrumbs from '../components/atoms/BreadCrumbs';
 import PageContainer from '../components/atoms/PageContainer';
 import HistoryChart from '../components/organisms/Statistic/HistoryChart';
 import UserPerSexChart from '../components/organisms/Statistic/UserPerSexChart';
 import UserPerAgeChart from '../components/organisms/Statistic/UserPerAgeChart';
+import MostScoresTable from '../components/organisms/Statistic/MostScoresTable';
+import LessScoresTable from '../components/organisms/Statistic/LessScoresTable';
+import TopScoresTable from '../components/organisms/Statistic/TopScoresTable';
 import { RootState } from '../store';
 import { getAll } from '../store/slices/statistic';
+import { getAll as getUsers, setPage, setQty, setOrder } from '../store/slices/user';
 
 export default function Home() {
     const dispatch = useDispatch();
-    const { data } = useSelector((state: RootState) => state.statistic);
+    const { data, loading } = useSelector((state: RootState) => state.statistic);
+    const { items: topUsers } = useSelector((state: RootState) => state.user);
+
+    async function getData() {
+        dispatch(getAll());
+        await dispatch(setPage(1));
+        await dispatch(setQty(10));
+        await dispatch(setOrder('pontos-desc'));
+        dispatch(getUsers());
+    }
 
     useEffect(() => {
-        dispatch(getAll());
+        getData();
     }, []);
 
     return (
         <PageContainer padded hasSidebar>
             <BreadCrumbs />
-            <h1>Dashboard</h1>
+            <div className="d-flex align-items-center justify-content-between">
+                <h1>Dashboard</h1>
+                {loading ? <Spinner color="secondary" /> : null}
+            </div>
             <hr className="mt-0" />
             <Card className="mb-3">
+                <CardHeader>
+                    <CardTitle>Histórico</CardTitle>
+                </CardHeader>
                 <CardBody>
                     <HistoryChart data={data} />
                 </CardBody>
             </Card>
             <div className="row">
                 <div className="col-12 col-md-6">
-                    <Card>
+                    <Card className="mb-3">
+                        <CardHeader>
+                            <CardTitle>Usuários x sexo</CardTitle>
+                        </CardHeader>
                         <CardBody>
                             <UserPerSexChart data={data} />
                         </CardBody>
                     </Card>
                 </div>
                 <div className="col-12 col-md-6">
-                    <Card>
+                    <Card className="mb-3">
+                        <CardHeader>
+                            <CardTitle>Usuários x faixa etária</CardTitle>
+                        </CardHeader>
                         <CardBody>
                             <UserPerAgeChart data={data} />
+                        </CardBody>
+                    </Card>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-12 col-lg-4">
+                    <Card className="mb-3">
+                        <CardHeader>
+                            <CardTitle>
+                                <i className="bi-graph-up"></i>
+                                <span className="p-2">Usuários que mais pontuaram</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardBody>
+                            <TopScoresTable users={topUsers} />
+                        </CardBody>
+                    </Card>
+                </div>
+                <div className="col-12 col-lg-4">
+                    <Card className="mb-3">
+                        <CardHeader>
+                            <CardTitle>
+                                <i className="bi-hand-thumbs-up"></i>
+                                <span className="p-2">Usuários pontuaram mais vezes</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardBody>
+                            <MostScoresTable data={data} />
+                        </CardBody>
+                    </Card>
+                </div>
+                <div className="col-12 col-lg-4">
+                    <Card className="mb-3">
+                        <CardHeader>
+                            <CardTitle>
+                                <i className="bi-hand-thumbs-down"></i>
+                                <span className="p-2">Usuários pontuaram menos vezes</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardBody>
+                            <LessScoresTable data={data} />
                         </CardBody>
                     </Card>
                 </div>
