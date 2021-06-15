@@ -67,7 +67,7 @@ export default class HttpClient {
         this.client.interceptors.request.use(
             (config) => {
                 const token = this.getToken();
-                config.headers.common.Authorization = token ? token : null;
+                config.headers.common.Authorization = token ? `Bearer ${token}` : null;
                 return config;
             },
             (error) => {

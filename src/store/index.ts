@@ -2,6 +2,7 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 // SLICES
 import auth from './slices/auth';
+import statistic from './slices/statistic';
 
 // MIDDLEWARE
 const middleware = getDefaultMiddleware();
@@ -10,6 +11,7 @@ const middleware = getDefaultMiddleware();
 const store = configureStore({
     reducer: {
         auth,
+        statistic,
     },
     middleware,
 });
