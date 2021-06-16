@@ -28,7 +28,13 @@ $font-family-sans-serif: 'Open Sans', sans-serif;
     text-align: right;
 }
 
+th.compact,
 td.compact {
     width: 1px;
     white-space: nowrap;
+}
+
+tr.align-middle td,
+tr.align-middle th {
+    vertical-align: middle !important;
 }

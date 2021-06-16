@@ -40,17 +40,19 @@ export default function Categories() {
         if (items) {
             return items.map((item, i) => {
                 return (
-                    <tr key={i}>
+                    <tr key={i} className="align-middle">
                         <td className="compact">{i + 1}</td>
                         <td>{item.nome}</td>
                         <td className="compact">
                             <ButtonGroup size="sm">
-                                <Button color="primary">Editar</Button>
+                                <Button size="sm" color="primary">
+                                    Editar
+                                </Button>
                                 <ButtonDropdown
                                     isOpen={openActionDropdown === item.id}
                                     toggle={() => handleMoreDropdown(item.id)}
                                 >
-                                    <DropdownToggle color="light" caret>
+                                    <DropdownToggle size="sm" color="light" caret>
                                         Mais
                                     </DropdownToggle>
                                     <DropdownMenu>
@@ -79,8 +81,9 @@ export default function Categories() {
             <Table bordered striped hover responsive>
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th className="compact">#</th>
                         <th>Nome</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>{renderItems()}</tbody>

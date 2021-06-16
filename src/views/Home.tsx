@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, CardHeader, CardTitle, CardBody, Spinner } from 'reactstrap';
+import { Card, CardHeader, CardTitle, CardBody, Spinner, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import BreadCrumbs from '../components/atoms/BreadCrumbs';
 import PageContainer from '../components/atoms/PageContainer';
 import HistoryChart from '../components/organisms/Statistic/HistoryChart';
+import EstablishmentPerCategoryChart from '../components/organisms/Statistic/EstablishmentPerCategoryChart';
 import UserPerSexChart from '../components/organisms/Statistic/UserPerSexChart';
 import UserPerAgeChart from '../components/organisms/Statistic/UserPerAgeChart';
 import MostScoresTable from '../components/organisms/Statistic/MostScoresTable';
@@ -15,6 +16,7 @@ import { getAll as getUsers, setPage, setQty, setOrder } from '../store/slices/u
 
 export default function Home() {
     const dispatch = useDispatch();
+    const [activeTab, setActiveTab] = useState('users');
     const { data, loading } = useSelector((state: RootState) => state.statistic);
     const { items: topUsers } = useSelector((state: RootState) => state.user);
 
@@ -38,6 +40,7 @@ export default function Home() {
                 {loading ? <Spinner color="secondary" /> : null}
             </div>
             <hr className="mt-0" />
+            {/* CONTEUDO PRINCIPAL */}
             <Card className="mb-3">
                 <CardHeader>
                     <CardTitle>Histórico</CardTitle>
@@ -46,69 +49,112 @@ export default function Home() {
                     <HistoryChart data={data} />
                 </CardBody>
             </Card>
-            <div className="row">
-                <div className="col-12 col-md-6">
-                    <Card className="mb-3">
-                        <CardHeader>
-                            <CardTitle>Usuários x sexo</CardTitle>
-                        </CardHeader>
-                        <CardBody>
-                            <UserPerSexChart data={data} />
-                        </CardBody>
-                    </Card>
-                </div>
-                <div className="col-12 col-md-6">
-                    <Card className="mb-3">
-                        <CardHeader>
-                            <CardTitle>Usuários x faixa etária</CardTitle>
-                        </CardHeader>
-                        <CardBody>
-                            <UserPerAgeChart data={data} />
-                        </CardBody>
-                    </Card>
-                </div>
-            </div>
-            <div className="row">
-                <div className="col-12 col-lg-4">
-                    <Card className="mb-3">
-                        <CardHeader>
-                            <CardTitle>
-                                <i className="bi-graph-up"></i>
-                                <span className="p-2">Usuários que mais pontuaram</span>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardBody>
-                            <TopScoresTable users={topUsers} />
-                        </CardBody>
-                    </Card>
-                </div>
-                <div className="col-12 col-lg-4">
-                    <Card className="mb-3">
-                        <CardHeader>
-                            <CardTitle>
-                                <i className="bi-hand-thumbs-up"></i>
-                                <span className="p-2">Usuários pontuaram mais vezes</span>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardBody>
-                            <MostScoresTable data={data} />
-                        </CardBody>
-                    </Card>
-                </div>
-                <div className="col-12 col-lg-4">
-                    <Card className="mb-3">
-                        <CardHeader>
-                            <CardTitle>
-                                <i className="bi-hand-thumbs-down"></i>
-                                <span className="p-2">Usuários pontuaram menos vezes</span>
-                            </CardTitle>
-                        </CardHeader>
-                        <CardBody>
-                            <LessScoresTable data={data} />
-                        </CardBody>
-                    </Card>
-                </div>
-            </div>
+            {/* NAVEGAÇÃO ENTRE ABAS */}
+            <Nav tabs>
+                <NavItem>
+                    <NavLink
+                        className={`${activeTab === 'users' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('users')}
+                    >
+                        Usuários
+                    </NavLink>
+                </NavItem>
+                <NavItem>
+                    <NavLink
+                        className={`${activeTab === 'establishments' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('establishments')}
+                    >
+                        Estabelecimentos
+                    </NavLink>
+                </NavItem>
+            </Nav>
+            <TabContent activeTab={activeTab}>
+                {/* USUARIOS */}
+                <TabPane tabId="users">
+                    <div className="mt-3">
+                        <div className="row">
+                            <div className="col-12 col-md-6">
+                                <Card className="mb-3">
+                                    <CardHeader>
+                                        <CardTitle>Usuários x sexo</CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <UserPerSexChart data={data} />
+                                    </CardBody>
+                                </Card>
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <Card className="mb-3">
+                                    <CardHeader>
+                                        <CardTitle>Usuários x faixa etária</CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <UserPerAgeChart data={data} />
+                                    </CardBody>
+                                </Card>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12 col-lg-4">
+                                <Card className="mb-3">
+                                    <CardHeader>
+                                        <CardTitle>
+                                            <i className="bi-graph-up"></i>
+                                            <span className="p-2">Usuários que mais pontuaram</span>
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <TopScoresTable users={topUsers} />
+                                    </CardBody>
+                                </Card>
+                            </div>
+                            <div className="col-12 col-lg-4">
+                                <Card className="mb-3">
+                                    <CardHeader>
+                                        <CardTitle>
+                                            <i className="bi-hand-thumbs-up"></i>
+                                            <span className="p-2">Usuários pontuaram mais vezes</span>
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <MostScoresTable data={data} />
+                                    </CardBody>
+                                </Card>
+                            </div>
+                            <div className="col-12 col-lg-4">
+                                <Card className="mb-3">
+                                    <CardHeader>
+                                        <CardTitle>
+                                            <i className="bi-hand-thumbs-down"></i>
+                                            <span className="p-2">Usuários pontuaram menos vezes</span>
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <LessScoresTable data={data} />
+                                    </CardBody>
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+                </TabPane>
+                {/* ESTABELECIMENTOS */}
+                <TabPane tabId="establishments">
+                    <div className="mt-3">
+                        <div className="row">
+                            <div className="col-12 col-md-6">
+                                <Card className="mb-3">
+                                    <CardHeader>
+                                        <CardTitle>Estabelecimentos x categoria</CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <EstablishmentPerCategoryChart data={data} />
+                                    </CardBody>
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+                </TabPane>
+            </TabContent>
         </PageContainer>
     );
 }

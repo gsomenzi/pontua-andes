@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
-const BASEURL = 'https://api.pontuafidelidade.com.br/api';
+const BASEURL = 'https://salty-hollows-95069.herokuapp.com/api';
 
 /**
  * Cliente HTTP com interceptor para adicionar o token às requisilções

@@ -2,6 +2,7 @@ interface StatisticData {
     estabelecimentos: {
         hoje: number;
         total: number;
+        por_categoria: any[];
     };
     pontuacoes: {
         hoje: number;
