@@ -3,6 +3,7 @@ interface StatisticData {
         hoje: number;
         total: number;
         por_categoria: any[];
+        por_cidade: any[];
     };
     pontuacoes: {
         hoje: number;

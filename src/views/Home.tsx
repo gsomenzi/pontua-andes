@@ -5,6 +5,7 @@ import BreadCrumbs from '../components/atoms/BreadCrumbs';
 import PageContainer from '../components/atoms/PageContainer';
 import HistoryChart from '../components/organisms/Statistic/HistoryChart';
 import EstablishmentPerCategoryChart from '../components/organisms/Statistic/EstablishmentPerCategoryChart';
+import EstablishmentPerCityChart from '../components/organisms/Statistic/EstablishmentPerCityChart';
 import UserPerSexChart from '../components/organisms/Statistic/UserPerSexChart';
 import UserPerAgeChart from '../components/organisms/Statistic/UserPerAgeChart';
 import MostScoresTable from '../components/organisms/Statistic/MostScoresTable';
@@ -148,6 +149,16 @@ export default function Home() {
                                     </CardHeader>
                                     <CardBody>
                                         <EstablishmentPerCategoryChart data={data} />
+                                    </CardBody>
+                                </Card>
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <Card className="mb-3">
+                                    <CardHeader>
+                                        <CardTitle>Estabelecimentos x cidade</CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <EstablishmentPerCityChart data={data} />
                                     </CardBody>
                                 </Card>
                             </div>
