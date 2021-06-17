@@ -14,12 +14,14 @@ import {
 } from 'reactstrap';
 import BreadCrumbs from '../components/atoms/BreadCrumbs';
 import PageContainer from '../components/atoms/PageContainer';
+import Drawer from '../components/molecules/Drawer';
 import { RootState } from '../store';
 import { getAll, search } from '../store/slices/category';
 
 const breadCrumbItems = [{ title: 'Categorias' }];
 
 export default function Categories() {
+    const [openDrawer, setOpenDrawer] = useState(true);
     const [openActionDropdown, setOpenActionDropdown] = useState();
     const dispatch = useDispatch();
     const { getting, items } = useSelector((state: RootState) => state.category);
@@ -88,6 +90,7 @@ export default function Categories() {
                 </thead>
                 <tbody>{renderItems()}</tbody>
             </Table>
+            <Drawer open={openDrawer} setOpen={setOpenDrawer}></Drawer>
         </PageContainer>
     );
 }

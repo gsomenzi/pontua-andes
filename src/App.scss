@@ -11,6 +11,7 @@ $font-family-sans-serif: 'Open Sans', sans-serif;
 
 // COMPONENTS
 
+@import './styles/components/Drawer.scss';
 @import './styles/components/BackgroundImage.scss';
 @import './styles/components/PageContainer.scss';
 @import './styles/components/PageLoader.scss';
