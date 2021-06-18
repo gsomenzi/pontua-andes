@@ -16,15 +16,18 @@ import BreadCrumbs from '../components/atoms/BreadCrumbs';
 import PageContainer from '../components/atoms/PageContainer';
 import Drawer from '../components/molecules/Drawer';
 import { RootState } from '../store';
-import { getAll, search } from '../store/slices/category';
+import { getAll, search, remove } from '../store/slices/category';
+import ConfirmDialog from '../components/molecules/ConfirmDialog';
 
 const breadCrumbItems = [{ title: 'Categorias' }];
 
 export default function Categories() {
+    const [showRemoveModal, setShowRemoveModal] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(true);
+    const [selected, setSelected] = useState({ id: 0 });
     const [openActionDropdown, setOpenActionDropdown] = useState();
     const dispatch = useDispatch();
-    const { getting, items } = useSelector((state: RootState) => state.category);
+    const { getting, removing, items, error } = useSelector((state: RootState) => state.category);
 
     useEffect(() => {
         dispatch(getAll());
@@ -38,6 +41,12 @@ export default function Categories() {
         dispatch(search(ev.target.value));
     }
 
+    function handleRemove(e: any, item: any) {
+        e.preventDefault();
+        setSelected(item);
+        setShowRemoveModal(true);
+    }
+
     function renderItems() {
         if (items) {
             return items.map((item, i) => {
@@ -47,7 +56,7 @@ export default function Categories() {
                         <td>{item.nome}</td>
                         <td className="compact">
                             <ButtonGroup size="sm">
-                                <Button size="sm" color="primary">
+                                <Button onClick={(ev) => setOpenDrawer(true)} size="sm" color="primary">
                                     Editar
                                 </Button>
                                 <ButtonDropdown
@@ -55,10 +64,14 @@ export default function Categories() {
                                     toggle={() => handleMoreDropdown(item.id)}
                                 >
                                     <DropdownToggle size="sm" color="light" caret>
-                                        Mais
+                                        {removing && selected && selected.id === item.id ? (
+                                            <Spinner size="sm" />
+                                        ) : (
+                                            'Mais'
+                                        )}
                                     </DropdownToggle>
                                     <DropdownMenu>
-                                        <DropdownItem>Remover</DropdownItem>
+                                        <DropdownItem onClick={(ev) => handleRemove(ev, item)}>Remover</DropdownItem>
                                     </DropdownMenu>
                                 </ButtonDropdown>
                             </ButtonGroup>
@@ -77,9 +90,13 @@ export default function Categories() {
                 {getting ? <Spinner color="secondary" /> : null}
             </div>
             <hr className="mt-0" />
-            <InputGroup className="mb-3">
-                <Input placeholder="Pesquisar em categorias..." onChange={handleSearch} />
-            </InputGroup>
+            <div className="row">
+                <div className="col-12 col-md-4">
+                    <InputGroup className="mb-3">
+                        <Input placeholder="Pesquisar em categorias..." onChange={handleSearch} />
+                    </InputGroup>
+                </div>
+            </div>
             <Table bordered striped hover responsive>
                 <thead>
                     <tr>
@@ -91,6 +108,13 @@ export default function Categories() {
                 <tbody>{renderItems()}</tbody>
             </Table>
             <Drawer open={openDrawer} setOpen={setOpenDrawer}></Drawer>
+            <ConfirmDialog
+                title="Remover o item?"
+                text="Você tem certeza que deseja remover este item?"
+                show={showRemoveModal}
+                setShow={setShowRemoveModal}
+                onConfirm={() => dispatch(remove(selected.id))}
+            />
         </PageContainer>
     );
 }

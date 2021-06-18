@@ -12,4 +12,8 @@ export default class CategoryService {
         const res = await httpClient.get(url);
         return res;
     }
+    static async remove(id: number | string) {
+        const url = `/admin/categorias-estabelecimentos/${id}`;
+        const res = await httpClient.delete(url);
+    }
 }

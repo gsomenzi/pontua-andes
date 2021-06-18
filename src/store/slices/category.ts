@@ -5,6 +5,7 @@ type CategoryState = {
     items: any[];
     error: any;
     getting: boolean;
+    removing: boolean;
     page: number;
     qty: number;
     order: 'alfabetica' | 'alfabetica-desc';
@@ -14,6 +15,7 @@ const initialState: CategoryState = {
     items: [],
     error: null,
     getting: false,
+    removing: false,
     page: 1,
     qty: 25,
     order: 'alfabetica',
@@ -34,6 +36,15 @@ export const search = createAsyncThunk('category/search', async (term: string, t
         const { page, qty, order } = thunkAPI.getState().category;
         const { data } = await CategoryService.search(term, page, qty, order);
         return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
+
+export const remove = createAsyncThunk('category/remove', async (id: string | number, thunkAPI: any) => {
+    try {
+        const res = await CategoryService.remove(id);
+        return id;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
@@ -80,6 +91,18 @@ export const slice = createSlice({
             })
             .addCase(search.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
+                state.error = action.payload.error;
+            })
+            .addCase(remove.pending, (state) => {
+                state.removing = true;
+                state.error = null;
+            })
+            .addCase(remove.fulfilled, (state, action: PayloadAction<number | string>) => {
+                state.removing = false;
+                state.items = state.items.filter((e) => e.id !== action.payload);
+            })
+            .addCase(remove.rejected, (state, action: PayloadAction<any>) => {
+                state.removing = false;
                 state.error = action.payload.error;
             });
     },
