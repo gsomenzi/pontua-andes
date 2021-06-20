@@ -15,6 +15,7 @@ import {
 import BreadCrumbs from '../components/atoms/BreadCrumbs';
 import PageContainer from '../components/atoms/PageContainer';
 import Drawer from '../components/molecules/Drawer';
+import PageHeader from '../components/molecules/PageHeader';
 import { RootState } from '../store';
 import { getAll, search, remove } from '../store/slices/category';
 import ConfirmDialog from '../components/molecules/ConfirmDialog';
@@ -85,18 +86,12 @@ export default function Categories() {
     return (
         <PageContainer padded hasSidebar>
             <BreadCrumbs items={breadCrumbItems} />
-            <div className="d-flex align-items-center justify-content-between">
-                <h1>Categorias</h1>
-                {getting ? <Spinner color="secondary" /> : null}
-            </div>
-            <hr className="mt-0" />
-            <div className="row">
-                <div className="col-12 col-md-4">
-                    <InputGroup className="mb-3">
-                        <Input placeholder="Pesquisar em categorias..." onChange={handleSearch} />
-                    </InputGroup>
-                </div>
-            </div>
+            <PageHeader
+                title="Categorias"
+                loading={getting}
+                searchPlaceholder="Pesquisar em categorias..."
+                handleSearch={handleSearch}
+            />
             <Table bordered striped hover responsive>
                 <thead>
                     <tr>
