@@ -5,7 +5,7 @@ type Props = {
     users: any[];
 };
 
-export default function TopScoresTable(props: Props) {
+export default function TopScoresUsersTable(props: Props) {
     const { users } = props;
 
     function renderUsers() {

@@ -8,14 +8,13 @@ import {
     DropdownMenu,
     DropdownToggle,
     Table,
-    InputGroup,
-    Input,
     Spinner,
 } from 'reactstrap';
 import BreadCrumbs from '../components/atoms/BreadCrumbs';
 import PageContainer from '../components/atoms/PageContainer';
 import Drawer from '../components/molecules/Drawer';
 import PageHeader from '../components/molecules/PageHeader';
+import CategoriesForm from '../components/organisms/Categories/Form';
 import { RootState } from '../store';
 import { getAll, search, remove } from '../store/slices/category';
 import ConfirmDialog from '../components/molecules/ConfirmDialog';
@@ -24,7 +23,7 @@ const breadCrumbItems = [{ title: 'Categorias' }];
 
 export default function Categories() {
     const [showRemoveModal, setShowRemoveModal] = useState(false);
-    const [openDrawer, setOpenDrawer] = useState(true);
+    const [openDrawer, setOpenDrawer] = useState(false);
     const [selected, setSelected] = useState({ id: 0 });
     const [openActionDropdown, setOpenActionDropdown] = useState();
     const dispatch = useDispatch();
@@ -42,6 +41,11 @@ export default function Categories() {
         dispatch(search(ev.target.value));
     }
 
+    async function openEdit(item: any) {
+        await setSelected(item);
+        setOpenDrawer(true);
+    }
+
     function handleRemove(e: any, item: any) {
         e.preventDefault();
         setSelected(item);
@@ -57,7 +61,7 @@ export default function Categories() {
                         <td>{item.nome}</td>
                         <td className="compact">
                             <ButtonGroup size="sm">
-                                <Button onClick={(ev) => setOpenDrawer(true)} size="sm" color="primary">
+                                <Button onClick={(ev) => openEdit(item)} size="sm" color="primary">
                                     Editar
                                 </Button>
                                 <ButtonDropdown
@@ -102,7 +106,9 @@ export default function Categories() {
                 </thead>
                 <tbody>{renderItems()}</tbody>
             </Table>
-            <Drawer open={openDrawer} setOpen={setOpenDrawer}></Drawer>
+            <Drawer open={openDrawer} setOpen={setOpenDrawer}>
+                <CategoriesForm category={selected ? selected : undefined} />
+            </Drawer>
             <ConfirmDialog
                 title="Remover o item?"
                 text="Você tem certeza que deseja remover este item?"

@@ -8,9 +8,11 @@ import EstablishmentPerCategoryChart from '../components/organisms/Statistic/Est
 import EstablishmentPerCityChart from '../components/organisms/Statistic/EstablishmentPerCityChart';
 import UserPerSexChart from '../components/organisms/Statistic/UserPerSexChart';
 import UserPerAgeChart from '../components/organisms/Statistic/UserPerAgeChart';
-import MostScoresTable from '../components/organisms/Statistic/MostScoresTable';
-import LessScoresTable from '../components/organisms/Statistic/LessScoresTable';
-import TopScoresTable from '../components/organisms/Statistic/TopScoresTable';
+import MostScoresUsersTable from '../components/organisms/Statistic/MostScoresUsersTable';
+import LessScoresUsersTable from '../components/organisms/Statistic/LessScoresUsersTable';
+import TopScoresUsersTable from '../components/organisms/Statistic/TopScoresUsersTable';
+import MostScoresEstablishmentsTable from '../components/organisms/Statistic/MostScoresEstablishmentsTable';
+import LessScoresEstablishmentsTable from '../components/organisms/Statistic/LessScoresEstablishmentsTable';
 import { RootState } from '../store';
 import { getAll } from '../store/slices/statistic';
 import { getAll as getUsers, setPage, setQty, setOrder } from '../store/slices/user';
@@ -105,7 +107,7 @@ export default function Home() {
                                         </CardTitle>
                                     </CardHeader>
                                     <CardBody>
-                                        <TopScoresTable users={topUsers} />
+                                        <TopScoresUsersTable users={topUsers} />
                                     </CardBody>
                                 </Card>
                             </div>
@@ -118,7 +120,7 @@ export default function Home() {
                                         </CardTitle>
                                     </CardHeader>
                                     <CardBody>
-                                        <MostScoresTable data={data} />
+                                        <MostScoresUsersTable data={data} />
                                     </CardBody>
                                 </Card>
                             </div>
@@ -131,7 +133,7 @@ export default function Home() {
                                         </CardTitle>
                                     </CardHeader>
                                     <CardBody>
-                                        <LessScoresTable data={data} />
+                                        <LessScoresUsersTable data={data} />
                                     </CardBody>
                                 </Card>
                             </div>
@@ -159,6 +161,34 @@ export default function Home() {
                                     </CardHeader>
                                     <CardBody>
                                         <EstablishmentPerCityChart data={data} />
+                                    </CardBody>
+                                </Card>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12 col-lg-6">
+                                <Card className="mb-3">
+                                    <CardHeader>
+                                        <CardTitle>
+                                            <i className="bi-hand-thumbs-up"></i>
+                                            <span className="p-2">Estabelecimentos pontuaram mais vezes</span>
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <MostScoresEstablishmentsTable data={data} />
+                                    </CardBody>
+                                </Card>
+                            </div>
+                            <div className="col-12 col-lg-6">
+                                <Card className="mb-3">
+                                    <CardHeader>
+                                        <CardTitle>
+                                            <i className="bi-hand-thumbs-down"></i>
+                                            <span className="p-2">Estabelecimentos pontuaram menos vezes</span>
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardBody>
+                                        <LessScoresEstablishmentsTable data={data} />
                                     </CardBody>
                                 </Card>
                             </div>

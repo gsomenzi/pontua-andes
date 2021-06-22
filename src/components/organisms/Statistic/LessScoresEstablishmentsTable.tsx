@@ -5,18 +5,18 @@ type Props = {
     data: StatisticData | null;
 };
 
-export default function MostScoresTable(props: Props) {
+export default function LessScoresEstablishmentsTable(props: Props) {
     const { data } = props;
 
-    function renderUsers() {
-        if (data && data.usuarios && data.usuarios.mais_vezes) {
-            return data.usuarios.mais_vezes.map((user, i) => {
+    function renderEstablishments() {
+        if (data && data.estabelecimentos && data.estabelecimentos.menos_vezes) {
+            return data.estabelecimentos.menos_vezes.map((estabelecimento, i) => {
                 return (
                     <tr key={i}>
                         <td>{i + 1}</td>
-                        <td className="text-nowrap">{user.nome}</td>
+                        <td className="text-nowrap">{estabelecimento.razao_social}</td>
                         <td className="text-right">
-                            <strong>{user.vezes}</strong>
+                            <strong>{estabelecimento.vezes || 0}</strong>
                         </td>
                     </tr>
                 );
@@ -34,7 +34,7 @@ export default function MostScoresTable(props: Props) {
                         <th className="text-right">Vezes</th>
                     </tr>
                 </thead>
-                <tbody>{renderUsers()}</tbody>
+                <tbody>{renderEstablishments()}</tbody>
             </Table>
         </div>
     );

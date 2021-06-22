@@ -2,6 +2,8 @@ interface StatisticData {
     estabelecimentos: {
         hoje: number;
         total: number;
+        mais_vezes: any[];
+        menos_vezes: any[];
         por_categoria: any[];
         por_cidade: any[];
     };
