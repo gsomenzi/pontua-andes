@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Input, InputGroup, Spinner } from 'reactstrap';
 
 type Props = {
@@ -6,15 +6,38 @@ type Props = {
     title: string;
     searchPlaceholder?: string;
     handleSearch?: Function;
+    actions?: ReactElement | ReactElement[];
 };
 
 export default function PageHeader(props: Props) {
-    const { loading, searchPlaceholder, handleSearch, title } = props;
+    const { actions, loading, searchPlaceholder, handleSearch, title } = props;
+
+    function renderActions() {
+        if (!actions) return null;
+        if (!Array.isArray(actions)) {
+            return <>{actions}</>;
+        } else {
+            return actions.map((action, i) => {
+                return (
+                    <span className="ml-1" key={i}>
+                        {action}
+                    </span>
+                );
+            });
+        }
+    }
+
     return (
         <div>
             <div className="d-flex align-items-center justify-content-between">
+                {/* TITULO */}
                 <h1>{title}</h1>
-                {loading ? <Spinner color="secondary" /> : null}
+                <div className="d-flex align-items-center">
+                    {/* LOADER */}
+                    {loading ? <Spinner color="secondary" /> : null}
+                    {/* ACOES */}
+                    <div className="d-flex align-items-center">{renderActions()}</div>
+                </div>
             </div>
             <hr className="mt-0" />
             <div className="row">

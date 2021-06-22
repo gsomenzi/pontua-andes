@@ -4,6 +4,7 @@
     width: 100vw;
     height: 100vh;
     z-index: 2;
+    overflow-x: hidden;
 }
 .drawer-overlay {
     position: absolute;
@@ -21,4 +22,5 @@
     width: 320px;
     box-shadow: -4px -4px 8px rgba(0, 0, 0, 0.1);
     padding: 1rem;
+    transform: translate(100%);
 }

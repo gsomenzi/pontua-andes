@@ -1,30 +1,45 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import CategoryService from '../../services/category';
+import { parseTrustedFields } from '../../tools';
+
+const CREATE_FIELDS = ['nome'];
+const UPDATE_FIELDS = ['nome'];
 
 type CategoryState = {
     items: any[];
     error: any;
+    creating: boolean;
+    updating: boolean;
     getting: boolean;
     removing: boolean;
-    page: number;
-    qty: number;
+    pagination: {
+        page: number;
+        qty: number;
+        last: number;
+    };
     order: 'alfabetica' | 'alfabetica-desc';
 };
 
 const initialState: CategoryState = {
     items: [],
     error: null,
+    creating: false,
+    updating: false,
     getting: false,
     removing: false,
-    page: 1,
-    qty: 25,
+    pagination: {
+        page: 1,
+        qty: 25,
+        last: 1,
+    },
     order: 'alfabetica',
 };
 
 export const getAll = createAsyncThunk('category/getAll', async (payload: undefined, thunkAPI: any) => {
     try {
-        const { page, qty, order } = thunkAPI.getState().category;
-        const { data } = await CategoryService.getAll(page, qty, order);
+        const { pagination, order } = thunkAPI.getState().category;
+        const { data } = await CategoryService.getAll(pagination.page, pagination.qty, order);
+        console.log('DATADATA', data);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
@@ -35,6 +50,27 @@ export const search = createAsyncThunk('category/search', async (term: string, t
     try {
         const { page, qty, order } = thunkAPI.getState().category;
         const { data } = await CategoryService.search(term, page, qty, order);
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
+
+export const create = createAsyncThunk('category/create', async (payload: any, thunkAPI: any) => {
+    try {
+        const createPayload = parseTrustedFields(CREATE_FIELDS, payload);
+        const { data } = await CategoryService.create(createPayload);
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
+
+export const update = createAsyncThunk('category/update', async (payload: any, thunkAPI: any) => {
+    try {
+        const { id } = payload;
+        const updatePayload = parseTrustedFields(UPDATE_FIELDS, payload);
+        const { data } = await CategoryService.update(id, updatePayload);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
@@ -55,10 +91,10 @@ export const slice = createSlice({
     initialState,
     reducers: {
         setPage: (state, action) => {
-            state.page = action.payload;
+            state.pagination.page = action.payload;
         },
         setQty: (state, action) => {
-            state.qty = action.payload;
+            state.pagination.qty = action.payload;
         },
         setOrder: (state, action) => {
             state.order = action.payload;
@@ -73,7 +109,13 @@ export const slice = createSlice({
             })
             .addCase(getAll.fulfilled, (state, action: PayloadAction<any>) => {
                 state.getting = false;
-                state.items = action.payload.data;
+                const { data, meta } = action.payload;
+                state.items = data;
+                state.pagination = {
+                    page: meta.current_page,
+                    qty: meta.per_page,
+                    last: meta.last_page,
+                };
             })
             .addCase(getAll.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
@@ -93,6 +135,35 @@ export const slice = createSlice({
                 state.getting = false;
                 state.error = action.payload.error;
             })
+            // CREATE
+            .addCase(create.pending, (state) => {
+                state.creating = true;
+                state.error = null;
+            })
+            .addCase(create.fulfilled, (state, action: PayloadAction<any>) => {
+                state.creating = false;
+                state.items.splice(0, 0, action.payload);
+            })
+            .addCase(create.rejected, (state, action: PayloadAction<any>) => {
+                state.creating = false;
+                state.error = action.payload.error;
+            })
+            // UPDATE
+            .addCase(update.pending, (state) => {
+                state.updating = true;
+                state.error = null;
+            })
+            .addCase(update.fulfilled, (state, action: PayloadAction<any>) => {
+                state.updating = false;
+                const { data } = action.payload;
+                const INDEX = state.items.findIndex((e) => e.id === data.id);
+                state.items.splice(INDEX, 1, data);
+            })
+            .addCase(update.rejected, (state, action: PayloadAction<any>) => {
+                state.updating = false;
+                state.error = action.payload.error;
+            })
+            // REMOVE
             .addCase(remove.pending, (state) => {
                 state.removing = true;
                 state.error = null;
