@@ -39,7 +39,6 @@ export const getAll = createAsyncThunk('category/getAll', async (payload: undefi
     try {
         const { pagination, order } = thunkAPI.getState().category;
         const { data } = await CategoryService.getAll(pagination.page, pagination.qty, order);
-        console.log('DATADATA', data);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
@@ -128,7 +127,6 @@ export const slice = createSlice({
             })
             .addCase(search.fulfilled, (state, action: PayloadAction<any>) => {
                 state.getting = false;
-                console.log(action.payload.data);
                 state.items = action.payload.data;
             })
             .addCase(search.rejected, (state, action: PayloadAction<any>) => {

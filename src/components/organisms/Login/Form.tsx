@@ -26,7 +26,6 @@ export default function Form() {
     const { values, handleChange, handleBlur, errors, touched } = formik;
 
     function submit(fields: any) {
-        console.log(fields);
         dispatch(signIn({ email: fields.email, password: fields.password }));
     }
 

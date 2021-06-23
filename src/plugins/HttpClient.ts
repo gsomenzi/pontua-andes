@@ -1,6 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
+const CancelToken = axios.CancelToken;
+const source = CancelToken.source();
 
 const BASEURL = 'https://salty-hollows-95069.herokuapp.com/api';
+// const BASEURL = 'https://api.pontuafidelidade.com.br/api';
 
 /**
  * Cliente HTTP com interceptor para adicionar o token às requisilções
@@ -25,7 +28,9 @@ export default class HttpClient {
      * @param url URL de destino da requisição
      */
     async get(url: string) {
-        return await this.client.get(url);
+        return await this.client.get(url, {
+            cancelToken: source.token,
+        });
     }
 
     /**
@@ -34,7 +39,9 @@ export default class HttpClient {
      * @param body Dados a serem enviados no corpo da requisição
      */
     async post(url: string, body = {}) {
-        return await this.client.post(url, body);
+        return await this.client.post(url, body, {
+            cancelToken: source.token,
+        });
     }
 
     /**
@@ -43,7 +50,9 @@ export default class HttpClient {
      * @param body Dados a serem enviados no corpo da requisição
      */
     async put(url: string, body = {}) {
-        return await this.client.put(url, body);
+        return await this.client.put(url, body, {
+            cancelToken: source.token,
+        });
     }
 
     /**
@@ -52,7 +61,9 @@ export default class HttpClient {
      * @param body Dados a serem enviados no corpo da requisição
      */
     async patch(url: string, body = {}) {
-        return await this.client.patch(url, body);
+        return await this.client.patch(url, body, {
+            cancelToken: source.token,
+        });
     }
 
     /**
@@ -60,7 +71,13 @@ export default class HttpClient {
      * @param url URL de destino da requisição
      */
     async delete(url: string) {
-        return await this.client.delete(url);
+        return await this.client.delete(url, {
+            cancelToken: source.token,
+        });
+    }
+
+    async cancelRequest() {
+        await source.cancel('Operation canceled by the user.');
     }
 
     configureInterceptors() {

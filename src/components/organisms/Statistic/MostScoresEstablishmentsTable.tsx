@@ -11,11 +11,6 @@ export default function MostScoresEstablishmentsTable(props: Props) {
     function renderEstablishments() {
         if (data && data.estabelecimentos && data.estabelecimentos.mais_vezes) {
             return data.estabelecimentos.mais_vezes.map((estabelecimento, i) => {
-                console.group('Estabelecimento x vez');
-                console.log('Estabelecimento:', estabelecimento.razao_social);
-                console.log('Vezes:', estabelecimento.vezes);
-                console.log('Raw', estabelecimento);
-                console.groupEnd();
                 return (
                     <tr key={i}>
                         <td>{i + 1}</td>

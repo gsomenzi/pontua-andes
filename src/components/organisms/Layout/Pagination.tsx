@@ -14,30 +14,32 @@ export default function Pagination(props: Props) {
 
     function handleNavigate(e: any, page: number) {
         e.preventDefault();
-        if (onNavigate) {
+        if (onNavigate && page <= data.last && page > 0) {
             onNavigate(page);
         }
     }
 
     function renderBefore() {
         if (data.page > 1) {
-            return Array(data.page - 1)
-                .fill(0)
-                .map((e, i) => {
-                    return (
-                        <PaginationItem key={i}>
-                            <PaginationLink href="/" onClick={(e) => handleNavigate(e, data.page - i - 1)}>
-                                {data.page - i - 1}
-                            </PaginationLink>
-                        </PaginationItem>
-                    );
-                });
+            const arrayCount = Array(Math.min(data.page - 1, 5)).fill(0);
+            return arrayCount.map((e, i) => {
+                return (
+                    <PaginationItem key={i}>
+                        <PaginationLink
+                            href="/"
+                            onClick={(e) => handleNavigate(e, data.page - (arrayCount.length - i))}
+                        >
+                            {data.page - (arrayCount.length - i)}
+                        </PaginationLink>
+                    </PaginationItem>
+                );
+            });
         }
     }
 
     function renderAfter() {
         if (data.last > data.page) {
-            return Array(data.last - data.page)
+            return Array(Math.min(data.last - data.page, 5))
                 .fill(0)
                 .map((e, i) => {
                     return (
@@ -57,15 +59,16 @@ export default function Pagination(props: Props) {
                 <PaginationLink first href="#" />
             </PaginationItem>
             <PaginationItem>
-                <PaginationLink previous href="#" />
+                <PaginationLink previous href="/" onClick={(e) => handleNavigate(e, data.page - 1)} />
             </PaginationItem>
             {renderBefore()}
-            <PaginationItem>
+            {/* CURRENT */}
+            <PaginationItem active>
                 <PaginationLink href="#">{data.page}</PaginationLink>
             </PaginationItem>
             {renderAfter()}
             <PaginationItem>
-                <PaginationLink next href="#" />
+                <PaginationLink next href="/" onClick={(e) => handleNavigate(e, data.page + 1)} />
             </PaginationItem>
             <PaginationItem>
                 <PaginationLink last href="#" />
