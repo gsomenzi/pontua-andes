@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import AdminService from '../../services/admin';
 import { parseTrustedFields } from '../../tools';
 
-const CREATE_FIELDS = ['nome'];
-const UPDATE_FIELDS = ['nome'];
+const CREATE_FIELDS = ['nome', 'email', 'senha', 'funcoes_id'];
+const UPDATE_FIELDS = ['nome', 'email', 'senha', 'funcoes_id'];
 
 type AdminState = {
     items: any[];

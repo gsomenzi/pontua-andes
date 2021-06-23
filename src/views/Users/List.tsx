@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
@@ -10,14 +11,14 @@ import {
     Table,
     Spinner,
 } from 'reactstrap';
-import BreadCrumbs from '../components/atoms/BreadCrumbs';
-import PageContainer from '../components/atoms/PageContainer';
-import Drawer from '../components/molecules/Drawer';
-import PageHeader from '../components/molecules/PageHeader';
-import { RootState } from '../store';
-import { getAll, search, setPage, remove } from '../store/slices/user';
-import ConfirmDialog from '../components/molecules/ConfirmDialog';
-import Pagination from '../components/organisms/Layout/Pagination';
+import BreadCrumbs from '../../components/atoms/BreadCrumbs';
+import PageContainer from '../../components/atoms/PageContainer';
+import Drawer from '../../components/molecules/Drawer';
+import PageHeader from '../../components/molecules/PageHeader';
+import { RootState } from '../../store';
+import { getAll, search, setPage, remove } from '../../store/slices/user';
+import ConfirmDialog from '../../components/molecules/ConfirmDialog';
+import Pagination from '../../components/organisms/Layout/Pagination';
 
 /**
  * Breadcrumbs no topo da página
@@ -112,10 +113,10 @@ export default function Users() {
                                         <img className="user-avatar" src={item.perfil.avatar} />
                                     </div>
                                 ) : null}
-                                <div>
+                                <Link to={`/usuarios/${item.id}`}>
                                     <p className="mt-0 mb-0 font-weight-bold">{item.nome}</p>
                                     <p className="mt-0 mb-0">{item.email}</p>
-                                </div>
+                                </Link>
                             </div>
                         </td>
                         <td className="compact">

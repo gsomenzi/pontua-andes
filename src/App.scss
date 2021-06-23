@@ -19,9 +19,27 @@ $font-family-sans-serif: 'Open Sans', sans-serif;
 
 // GLOBAL
 
+a {
+    color: inherit;
+}
+a:hover {
+    text-decoration: none;
+    color: inherit;
+}
+
 .user-avatar {
     width: 36px;
     height: 36px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar-large {
+    position: relative;
+    margin: 0 auto;
+    width: 128px;
+    height: 128px;
     object-fit: cover;
     border-radius: 50%;
     border: 1px solid rgba(0, 0, 0, 0.1);

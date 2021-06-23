@@ -90,6 +90,7 @@ export default function Admins() {
     }
 
     function submit(values: any) {
+        console.log(values);
         if (selected && selected.id) {
             dispatch(update({ ...values, id: selected.id }));
         } else {

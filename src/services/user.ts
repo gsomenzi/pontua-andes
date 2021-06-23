@@ -23,6 +23,11 @@ export default class UserService {
         const res = await httpClient.get(url);
         return res;
     }
+    static async getOne(id: number | string): Promise<any> {
+        const url = `/admin/usuarios/${id}`;
+        const res = await httpClient.get(url);
+        return res;
+    }
     // static async update(id: string | number, payload: CategoryUpdatePayload): Promise<any> {
     //     const url = `/admin/usuarios/${id}`;
     //     const res = await httpClient.put(url, payload);

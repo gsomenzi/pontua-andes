@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Form as BootstrapForm, FormGroup, Label, Input, FormFeedback, Button, Spinner } from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { Form as BootstrapForm, FormGroup, Label, Input, CustomInput, FormFeedback, Button, Spinner } from 'reactstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,14 +24,14 @@ type Props = {
 /**
  * Campos que podem sofrer alteração em caso de edição
  */
-const EDITABLE_FIELDS = ['nome', 'email', 'senha'];
+const EDITABLE_FIELDS = ['nome', 'email', 'senha', 'funcoes_id'];
 /**
  * Schema para validação no form
  */
 const schema = Yup.object().shape({
     nome: Yup.string().required('Por favor insira um nome'),
     email: Yup.string().required('Por favor insira um e-mail').email('Por favor insira um e-mail válido'),
-    senha: Yup.string().required('Por favor insira uma senha'),
+    senha: Yup.string(),
     funcoes_id: Yup.string().required('Por favor selecione uma função'),
 });
 
@@ -41,6 +41,7 @@ const schema = Yup.object().shape({
 export default function Form(props: Props) {
     const dispatch = useDispatch();
     const { loading, admin, onSubmit } = props;
+    const [resetPassword, setResetPassword] = useState(false);
     const { getting: gettingRoles, items: roles } = useSelector((state: RootState) => state.role);
     // BUSCA FUNCOES
     useEffect(() => {
@@ -76,6 +77,9 @@ export default function Form(props: Props) {
     // SUBMIT
     function submit(values: any) {
         if (onSubmit) {
+            if (!values.senha) {
+                values.senha = undefined;
+            }
             onSubmit(values);
         }
     }
@@ -105,17 +109,31 @@ export default function Form(props: Props) {
                 <FormFeedback>{formErrors.email}</FormFeedback>
             </FormGroup>
             {/* SENHA */}
-            <FormGroup>
-                <Label>Senha</Label>
-                <Input
-                    type="password"
-                    value={values.senha}
-                    onBlur={handleBlur('senha')}
-                    onChange={handleChange('senha')}
-                    invalid={!!(formErrors.senha && touched.senha)}
-                />
-                <FormFeedback>{formErrors.senha}</FormFeedback>
-            </FormGroup>
+            {admin && admin.id ? (
+                <FormGroup>
+                    <CustomInput
+                        type="switch"
+                        id="exampleCustomSwitch"
+                        name="customSwitch"
+                        label="Resetar senha"
+                        checked={resetPassword}
+                        onChange={(ev) => setResetPassword(ev.target.checked)}
+                    />
+                </FormGroup>
+            ) : null}
+            {!admin || !admin.id || resetPassword ? (
+                <FormGroup>
+                    <Label>Senha</Label>
+                    <Input
+                        type="password"
+                        value={values.senha}
+                        onBlur={handleBlur('senha')}
+                        onChange={handleChange('senha')}
+                        invalid={!!(formErrors.senha && touched.senha)}
+                    />
+                    <FormFeedback>{formErrors.senha}</FormFeedback>
+                </FormGroup>
+            ) : null}
             {/* FUNCAO */}
             <FormGroup>
                 <Label for="exampleSelectMulti">Função</Label>

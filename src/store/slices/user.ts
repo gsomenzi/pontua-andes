@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import UserService from '../../services/user';
 
 type UserState = {
+    item: any;
     items: any[];
     error: any;
     getting: boolean;
@@ -27,6 +28,7 @@ type UserState = {
 };
 
 const initialState: UserState = {
+    item: null,
     items: [],
     error: null,
     getting: false,
@@ -53,6 +55,15 @@ export const search = createAsyncThunk('user/search', async (term: string, thunk
     try {
         const { pagination, order } = thunkAPI.getState().user;
         const { data } = await UserService.search(term, pagination.page, pagination.qty, order);
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
+
+export const getOne = createAsyncThunk('user/getOne', async (id: number | string, thunkAPI: any) => {
+    try {
+        const { data } = await UserService.getOne(id);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
@@ -113,6 +124,21 @@ export const slice = createSlice({
                 state.items = action.payload.data;
             })
             .addCase(search.rejected, (state, action: PayloadAction<any>) => {
+                state.getting = false;
+                state.error = action.payload.error;
+            })
+            // GETONE
+            .addCase(getOne.pending, (state) => {
+                state.item = null;
+                state.getting = true;
+                state.error = null;
+            })
+            .addCase(getOne.fulfilled, (state, action: PayloadAction<any>) => {
+                state.getting = false;
+                const { data } = action.payload;
+                state.item = data;
+            })
+            .addCase(getOne.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
                 state.error = action.payload.error;
             })

@@ -4,13 +4,14 @@ import { Input, InputGroup, Spinner } from 'reactstrap';
 type Props = {
     loading?: boolean;
     title: string;
+    searchable?: boolean;
     searchPlaceholder?: string;
     handleSearch?: Function;
     actions?: ReactElement | ReactElement[];
 };
 
 export default function PageHeader(props: Props) {
-    const { actions, loading, searchPlaceholder, handleSearch, title } = props;
+    const { actions, loading, searchPlaceholder, handleSearch, title, searchable } = props;
 
     function renderActions() {
         if (!actions) return null;
@@ -42,12 +43,14 @@ export default function PageHeader(props: Props) {
             <hr className="mt-0" />
             <div className="row">
                 <div className="col-12 col-md-4">
-                    <InputGroup className="mb-3">
-                        <Input
-                            placeholder={searchPlaceholder || ''}
-                            onChange={(ev) => (handleSearch ? handleSearch(ev) : null)}
-                        />
-                    </InputGroup>
+                    {searchable === undefined || searchable ? (
+                        <InputGroup className="mb-3">
+                            <Input
+                                placeholder={searchPlaceholder || ''}
+                                onChange={(ev) => (handleSearch ? handleSearch(ev) : null)}
+                            />
+                        </InputGroup>
+                    ) : null}
                 </div>
             </div>
         </div>

@@ -11,7 +11,9 @@ import Home from './views/Home';
 import Categories from './views/Categories';
 import Establishments from './views/Establishments';
 import Admins from './views/Admins';
-import Users from './views/Users';
+// USUARIOS
+import Users from './views/Users/List';
+import UserDetails from './views/Users/Details';
 
 export default function Router() {
     const [ready, setReady] = useState(false);
@@ -39,6 +41,7 @@ export default function Router() {
                             <Route exact path="/estabelecimentos" component={Establishments} />
                             <Route exact path="/admins" component={Admins} />
                             <Route exact path="/usuarios" component={Users} />
+                            <Route path="/usuarios/:id" component={UserDetails} />
                         </Switch>
                     </>
                 ) : (
