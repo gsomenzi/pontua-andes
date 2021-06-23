@@ -1,9 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import UserService from '../../services/user';
+import AdminService from '../../services/admin';
+import { parseTrustedFields } from '../../tools';
 
-type UserState = {
+const CREATE_FIELDS = ['nome'];
+const UPDATE_FIELDS = ['nome'];
+
+type AdminState = {
     items: any[];
     error: any;
+    creating: boolean;
+    updating: boolean;
     getting: boolean;
     removing: boolean;
     pagination: {
@@ -11,24 +17,14 @@ type UserState = {
         qty: number;
         last: number;
     };
-    order:
-        | 'alfabetica'
-        | 'alfabetica-desc'
-        | 'escolaridade'
-        | 'escolaridade-desc'
-        | 'sexo'
-        | 'sexo-desc'
-        | 'data_nascimento'
-        | 'data_nascimento-desc'
-        | 'pontos'
-        | 'pontos-desc'
-        | 'vezes'
-        | 'vezes-desc';
+    order: 'alfabetica' | 'alfabetica-desc';
 };
 
-const initialState: UserState = {
+const initialState: AdminState = {
     items: [],
     error: null,
+    creating: false,
+    updating: false,
     getting: false,
     removing: false,
     pagination: {
@@ -39,29 +35,50 @@ const initialState: UserState = {
     order: 'alfabetica',
 };
 
-export const getAll = createAsyncThunk('user/getAll', async (payload: undefined, thunkAPI: any) => {
+export const getAll = createAsyncThunk('admin/getAll', async (payload: undefined, thunkAPI: any) => {
     try {
-        const { pagination, order } = thunkAPI.getState().user;
-        const { data } = await UserService.getAll(pagination.page, pagination.qty, order);
+        const { pagination, order } = thunkAPI.getState().admin;
+        const { data } = await AdminService.getAll(pagination.page, pagination.qty, order);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
 });
 
-export const search = createAsyncThunk('user/search', async (term: string, thunkAPI: any) => {
+export const search = createAsyncThunk('admin/search', async (term: string, thunkAPI: any) => {
     try {
-        const { pagination, order } = thunkAPI.getState().user;
-        const { data } = await UserService.search(term, pagination.page, pagination.qty, order);
+        const { pagination, order } = thunkAPI.getState().admin;
+        const { data } = await AdminService.search(term, pagination.page, pagination.qty, order);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
 });
 
-export const remove = createAsyncThunk('user/remove', async (id: string | number, thunkAPI: any) => {
+export const create = createAsyncThunk('admin/create', async (payload: any, thunkAPI: any) => {
     try {
-        const res = await UserService.remove(id);
+        const createPayload = parseTrustedFields(CREATE_FIELDS, payload);
+        const { data } = await AdminService.create(createPayload);
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
+
+export const update = createAsyncThunk('admin/update', async (payload: any, thunkAPI: any) => {
+    try {
+        const { id } = payload;
+        const updatePayload = parseTrustedFields(UPDATE_FIELDS, payload);
+        const { data } = await AdminService.update(id, updatePayload);
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
+
+export const remove = createAsyncThunk('admin/remove', async (id: string | number, thunkAPI: any) => {
+    try {
+        const res = await AdminService.remove(id);
         return id;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
@@ -114,6 +131,34 @@ export const slice = createSlice({
             })
             .addCase(search.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
+                state.error = action.payload.error;
+            })
+            // CREATE
+            .addCase(create.pending, (state) => {
+                state.creating = true;
+                state.error = null;
+            })
+            .addCase(create.fulfilled, (state, action: PayloadAction<any>) => {
+                state.creating = false;
+                state.items.splice(0, 0, action.payload);
+            })
+            .addCase(create.rejected, (state, action: PayloadAction<any>) => {
+                state.creating = false;
+                state.error = action.payload.error;
+            })
+            // UPDATE
+            .addCase(update.pending, (state) => {
+                state.updating = true;
+                state.error = null;
+            })
+            .addCase(update.fulfilled, (state, action: PayloadAction<any>) => {
+                state.updating = false;
+                const { data } = action.payload;
+                const INDEX = state.items.findIndex((e) => e.id === data.id);
+                state.items.splice(INDEX, 1, data);
+            })
+            .addCase(update.rejected, (state, action: PayloadAction<any>) => {
+                state.updating = false;
                 state.error = action.payload.error;
             })
             // REMOVE

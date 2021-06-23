@@ -24,12 +24,12 @@ export default class UserService {
         return res;
     }
     // static async update(id: string | number, payload: CategoryUpdatePayload): Promise<any> {
-    //     const url = `/admin/categorias-estabelecimentos/${id}`;
+    //     const url = `/admin/usuarios/${id}`;
     //     const res = await httpClient.put(url, payload);
     //     return res;
     // }
     static async remove(id: number | string) {
-        const url = `/admin/categorias/${id}`;
+        const url = `/admin/usuarios/${id}`;
         const res = await httpClient.delete(url);
     }
 }

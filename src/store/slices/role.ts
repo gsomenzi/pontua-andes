@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import UserService from '../../services/user';
+import RoleService from '../../services/role';
 
-type UserState = {
+type RoleState = {
     items: any[];
     error: any;
     getting: boolean;
@@ -11,22 +11,10 @@ type UserState = {
         qty: number;
         last: number;
     };
-    order:
-        | 'alfabetica'
-        | 'alfabetica-desc'
-        | 'escolaridade'
-        | 'escolaridade-desc'
-        | 'sexo'
-        | 'sexo-desc'
-        | 'data_nascimento'
-        | 'data_nascimento-desc'
-        | 'pontos'
-        | 'pontos-desc'
-        | 'vezes'
-        | 'vezes-desc';
+    order: 'alfabetica' | 'alfabetica-desc';
 };
 
-const initialState: UserState = {
+const initialState: RoleState = {
     items: [],
     error: null,
     getting: false,
@@ -39,29 +27,29 @@ const initialState: UserState = {
     order: 'alfabetica',
 };
 
-export const getAll = createAsyncThunk('user/getAll', async (payload: undefined, thunkAPI: any) => {
+export const getAll = createAsyncThunk('role/getAll', async (payload: undefined, thunkAPI: any) => {
     try {
-        const { pagination, order } = thunkAPI.getState().user;
-        const { data } = await UserService.getAll(pagination.page, pagination.qty, order);
+        const { pagination, order } = thunkAPI.getState().role;
+        const { data } = await RoleService.getAll(pagination.page, pagination.qty, order);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
 });
 
-export const search = createAsyncThunk('user/search', async (term: string, thunkAPI: any) => {
+export const search = createAsyncThunk('role/search', async (term: string, thunkAPI: any) => {
     try {
-        const { pagination, order } = thunkAPI.getState().user;
-        const { data } = await UserService.search(term, pagination.page, pagination.qty, order);
+        const { pagination, order } = thunkAPI.getState().role;
+        const { data } = await RoleService.search(term, pagination.page, pagination.qty, order);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
 });
 
-export const remove = createAsyncThunk('user/remove', async (id: string | number, thunkAPI: any) => {
+export const remove = createAsyncThunk('role/remove', async (id: string | number, thunkAPI: any) => {
     try {
-        const res = await UserService.remove(id);
+        const res = await RoleService.remove(id);
         return id;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
