@@ -2,8 +2,8 @@ import axios, { AxiosInstance } from 'axios';
 const CancelToken = axios.CancelToken;
 const source = CancelToken.source();
 
-const BASEURL = process.env.BASEURL ? process.env.BASEURL : 'https://salty-hollows-95069.herokuapp.com/api';
-// const BASEURL = process.env.BASEURL ? process.env.BASEURL : 'https://api.pontuafidelidade.com.br/api';
+// const BASEURL = process.env.BASEURL ? process.env.BASEURL : 'https://salty-hollows-95069.herokuapp.com/api';
+const BASEURL = process.env.BASEURL ? process.env.BASEURL : 'https://api.pontuafidelidade.com.br/api';
 
 /**
  * Cliente HTTP com interceptor para adicionar o token às requisilções

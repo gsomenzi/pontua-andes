@@ -33,6 +33,24 @@ export default function UserDetails(props: Props) {
         dispatch(getOne(params.id));
     }, [dispatch, params]);
 
+    function renderScores() {
+        return item.pontuacoes.map((pontuacao: any, i: number) => {
+            return (
+                <tr key={pontuacao.id} className="align-middle">
+                    <td>{i + 1}</td>
+                    <td>{moment(pontuacao.created_at).format('DD/MM/YYYY')}</td>
+                    <td>
+                        <p className="font-weight-bold mb-0">{pontuacao.estabelecimento.nome_fantasia}</p>
+                        <p className="mb-0">
+                            {pontuacao.estabelecimento.cidade}/{pontuacao.estabelecimento.estado}
+                        </p>
+                    </td>
+                    <td className="text-right font-weight-bold">{pontuacao.pontos}</td>
+                </tr>
+            );
+        });
+    }
+
     return (
         <PageContainer padded hasSidebar>
             <BreadCrumbs items={breadCrumbItems} />
@@ -87,6 +105,20 @@ export default function UserDetails(props: Props) {
                                 </Table>
                             </CardBody>
                         </Card>
+                    </div>
+                    <div className="col-12 col-md-8">
+                        <h4>Pontuações recentes</h4>
+                        <Table hover striped bordered>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Data</th>
+                                    <th>Estabelecimento</th>
+                                    <th className="text-right">Pontos</th>
+                                </tr>
+                            </thead>
+                            <tbody>{renderScores()}</tbody>
+                        </Table>
                     </div>
                 </div>
             ) : null}
