@@ -16,36 +16,38 @@ import PageContainer from '../../components/atoms/PageContainer';
 import Drawer from '../../components/molecules/Drawer';
 import PageHeader from '../../components/molecules/PageHeader';
 import { RootState } from '../../store';
-import { getAll, search, setPage, setOrder, remove } from '../../store/slices/user';
+import { getAll, search, setPage, setOrder, remove } from '../../store/slices/establishment';
 import ConfirmDialog from '../../components/molecules/ConfirmDialog';
 import Pagination from '../../components/organisms/Layout/Pagination';
 
 /**
  * Breadcrumbs no topo da página
  */
-const breadCrumbItems = [{ title: 'Usuários' }];
+const breadCrumbItems = [{ title: 'Estabelecimentos' }];
 
 /**
- * Página de usuários do Pontua
+ * Página de estabelecimentos do Pontua
  */
-export default function Users() {
+export default function Establishments() {
     const [showRemoveModal, setShowRemoveModal] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [selected, setSelected] = useState({ id: 0 });
     const [openActionDropdown, setOpenActionDropdown] = useState();
     const dispatch = useDispatch();
-    const { getting, removing, items, error, pagination, order } = useSelector((state: RootState) => state.user);
+    const { getting, removing, items, error, pagination, order } = useSelector(
+        (state: RootState) => state.establishment
+    );
 
     /**
-     * Busca todos os usuários ao montar a página
+     * Busca todos os estabelecimentos ao montar a página
      */
     useEffect(() => {
         dispatch(getAll());
     }, [dispatch, pagination.page, order]);
 
     /**
-     * Seleciona o usuário e mostra dropdown de mais do item
-     * @param id ID do usuário
+     * Seleciona o estabelecimento e mostra dropdown de mais do item
+     * @param id ID do estabelecimento
      */
     function handleMoreDropdown(id: any) {
         openActionDropdown === id ? setOpenActionDropdown(undefined) : setOpenActionDropdown(id);
@@ -76,8 +78,8 @@ export default function Users() {
     }
 
     /**
-     * Seleciona um usuário e abre o drawer para edição
-     * @param item Usuário a ser selecionado
+     * Seleciona um estabelecimento e abre o drawer para edição
+     * @param item Estabelecimento a ser selecionado
      */
     async function openEdit(item: any) {
         await setSelected(item);
@@ -85,9 +87,9 @@ export default function Users() {
     }
 
     /**
-     * Seleciona um usuário e abre modal para confirmar a remoção
+     * Seleciona um estabelecimento e abre modal para confirmar a remoção
      * @param e Evento do link a ser cancelado
-     * @param item Usuário a ser selecionado
+     * @param item Estabelecimento a ser selecionado
      */
     function handleRemove(e: any, item: any) {
         e.preventDefault();
@@ -104,7 +106,7 @@ export default function Users() {
     // }
 
     /**
-     * Renderiza os itens na tabela de usuários
+     * Renderiza os itens na tabela de estabelecimentos
      */
     function renderItems() {
         if (items) {
@@ -114,25 +116,7 @@ export default function Users() {
                         {/* Index */}
                         <td className="compact">{i + 1}</td>
                         {/* NOME e EMAIL */}
-                        <td>
-                            <div className="d-flex align-items-center">
-                                {item.perfil ? (
-                                    <div className="mr-2">
-                                        <img className="user-avatar" src={item.perfil.avatar} />
-                                    </div>
-                                ) : null}
-                                <Link to={`/usuarios/${item.id}`}>
-                                    <p className="mt-0 mb-0 font-weight-bold">{item.nome}</p>
-                                    <p className="mt-0 mb-0">{item.email}</p>
-                                </Link>
-                            </div>
-                        </td>
-                        {/* SEXO */}
-                        <td className="compact">{item.nome_sexo || 'Não informado'}</td>
-                        {/* ESCOLARIDADE */}
-                        <td className="compact">{item.nome_escolaridade || 'Não informado'}</td>
-                        {/* PONTOS */}
-                        <td className="compact">{item.pontos || '0'}</td>
+                        <td>{item.razao_social}</td>
                         <td className="compact">
                             <ButtonGroup size="sm">
                                 {/* <Button onClick={(ev) => openEdit(item)} size="sm" color="primary">
@@ -165,18 +149,14 @@ export default function Users() {
         <PageContainer padded hasSidebar>
             <BreadCrumbs items={breadCrumbItems} />
             <PageHeader
-                title="Usuários"
+                title="Estabelecimentos"
                 loading={getting}
-                searchPlaceholder="Pesquisar em usuários..."
+                searchPlaceholder="Pesquisar em estabelecimentos..."
                 handleSearch={handleSearch}
                 sortable
                 sortableOptions={[
                     { value: 'alfabetica', label: 'A-z ⬇' },
                     { value: 'alfabetica-desc', label: 'A-z ⬆' },
-                    { value: 'sexo', label: 'Sexo ⬆' },
-                    { value: 'sexo-desc', label: 'Sexo ⬇' },
-                    { value: 'escolaridade', label: 'Escol. ⬆' },
-                    { value: 'escolaridade-desc', label: 'Escol. ⬇' },
                     { value: 'pontos', label: 'Pontos ⬆' },
                     { value: 'pontos-desc', label: 'Pontos ⬇' },
                 ]}
@@ -187,8 +167,6 @@ export default function Users() {
                     <tr>
                         <th className="compact">#</th>
                         <th>Nome</th>
-                        <th>Sexo</th>
-                        <th>Escolaridade</th>
                         <th>Pontos</th>
                         <th>Ações</th>
                     </tr>
@@ -196,7 +174,7 @@ export default function Users() {
                 <tbody>{renderItems()}</tbody>
             </Table>
             <Pagination data={pagination} onNavigate={(page: number) => dispatch(setPage(page))} />
-            <Drawer open={openDrawer} setOpen={setOpenDrawer} title="Editar usuário"></Drawer>
+            <Drawer open={openDrawer} setOpen={setOpenDrawer} title="Editar estabelecimento"></Drawer>
             <ConfirmDialog
                 title="Remover o item?"
                 text="Você tem certeza que deseja remover este item?"

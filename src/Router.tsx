@@ -9,8 +9,9 @@ import { getLocalAccessToken } from './store/slices/auth';
 import Login from './views/auth/Login';
 import Home from './views/Home';
 import Categories from './views/Categories';
-import Establishments from './views/Establishments';
 import Admins from './views/Admins';
+// ESTABELECIMENTOS
+import Establishments from './views/Establishments/List';
 // USUARIOS
 import Users from './views/Users/List';
 import UserDetails from './views/Users/Details';

@@ -8,10 +8,26 @@ type Props = {
     searchPlaceholder?: string;
     handleSearch?: Function;
     actions?: ReactElement | ReactElement[];
+    sortable?: boolean;
+    sortableOptions?: {
+        label: string;
+        value: string | number;
+    }[];
+    handleSort?: Function;
 };
 
 export default function PageHeader(props: Props) {
-    const { actions, loading, searchPlaceholder, handleSearch, title, searchable } = props;
+    const {
+        actions,
+        loading,
+        searchPlaceholder,
+        handleSearch,
+        title,
+        searchable,
+        sortable,
+        sortableOptions,
+        handleSort,
+    } = props;
 
     function renderActions() {
         if (!actions) return null;
@@ -43,14 +59,31 @@ export default function PageHeader(props: Props) {
             <hr className="mt-0" />
             <div className="row">
                 <div className="col-12 col-md-4">
-                    {searchable === undefined || searchable ? (
-                        <InputGroup className="mb-3">
+                    <div className="d-flex align-items-center mb-3">
+                        {searchable === undefined || searchable ? (
+                            <InputGroup className="mr-1" style={{ flexGrow: 1 }}>
+                                <Input
+                                    placeholder={searchPlaceholder || ''}
+                                    onChange={(ev) => (handleSearch ? handleSearch(ev) : null)}
+                                />
+                            </InputGroup>
+                        ) : null}
+                        {sortable ? (
                             <Input
-                                placeholder={searchPlaceholder || ''}
-                                onChange={(ev) => (handleSearch ? handleSearch(ev) : null)}
-                            />
-                        </InputGroup>
-                    ) : null}
+                                type="select"
+                                name="order"
+                                id="selectOrder"
+                                onChange={(ev) => (handleSort ? handleSort(ev) : null)}
+                                style={{ width: 'auto' }}
+                            >
+                                {sortableOptions?.map((option) => (
+                                    <option key={option.value} value={option.value}>
+                                        {option.label}
+                                    </option>
+                                ))}
+                            </Input>
+                        ) : null}
+                    </div>
                 </div>
             </div>
         </div>

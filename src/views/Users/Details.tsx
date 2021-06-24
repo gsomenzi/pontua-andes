@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, CardBody, Table } from 'reactstrap';
+import { Button, Card, CardBody, Table, Badge } from 'reactstrap';
 import BreadCrumbs from '../../components/atoms/BreadCrumbs';
 import PageContainer from '../../components/atoms/PageContainer';
 import PageHeader from '../../components/molecules/PageHeader';
@@ -73,6 +73,12 @@ export default function UserDetails(props: Props) {
                                 <img src={item.perfil ? item.perfil.avatar : ''} className="user-avatar-large mb-3" />
                                 <h4 className="mb-0">{item.nome}</h4>
                                 <p>{item.email}</p>
+                                <div>
+                                    <h4 className="mb-0">
+                                        <Badge>{item.pontos}</Badge>
+                                    </h4>
+                                    <p>Pontos</p>
+                                </div>
                                 <Table className="text-left">
                                     <tbody>
                                         <tr>

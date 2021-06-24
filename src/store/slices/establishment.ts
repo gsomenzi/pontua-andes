@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import AdminService from '../../services/admin';
+import EstablishmentService from '../../services/establishment';
 import { parseTrustedFields } from '../../tools';
 
-const CREATE_FIELDS = ['nome', 'email', 'senha', 'funcoes_id'];
-const UPDATE_FIELDS = ['nome', 'email', 'senha', 'funcoes_id'];
+const CREATE_FIELDS = ['razao_social'];
+const UPDATE_FIELDS = ['razao_social'];
 
-type AdminState = {
+type EstablishmentState = {
     items: any[];
     error: any;
     creating: boolean;
@@ -20,7 +20,7 @@ type AdminState = {
     order: 'alfabetica' | 'alfabetica-desc';
 };
 
-const initialState: AdminState = {
+const initialState: EstablishmentState = {
     items: [],
     error: null,
     creating: false,
@@ -35,50 +35,50 @@ const initialState: AdminState = {
     order: 'alfabetica',
 };
 
-export const getAll = createAsyncThunk('admin/getAll', async (payload: undefined, thunkAPI: any) => {
+export const getAll = createAsyncThunk('establishment/getAll', async (payload: undefined, thunkAPI: any) => {
     try {
-        const { pagination, order } = thunkAPI.getState().admin;
-        const { data } = await AdminService.getAll(pagination.page, pagination.qty, order);
+        const { pagination, order } = thunkAPI.getState().establishment;
+        const { data } = await EstablishmentService.getAll(pagination.page, pagination.qty, order);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
 });
 
-export const search = createAsyncThunk('admin/search', async (term: string, thunkAPI: any) => {
+export const search = createAsyncThunk('establishment/search', async (term: string, thunkAPI: any) => {
     try {
-        const { pagination, order } = thunkAPI.getState().admin;
-        const { data } = await AdminService.search(term, pagination.page, pagination.qty, order);
+        const { pagination, order } = thunkAPI.getState().establishment;
+        const { data } = await EstablishmentService.search(term, pagination.page, pagination.qty, order);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
 });
 
-export const create = createAsyncThunk('admin/create', async (payload: any, thunkAPI: any) => {
+export const create = createAsyncThunk('establishment/create', async (payload: any, thunkAPI: any) => {
     try {
         const createPayload = parseTrustedFields(CREATE_FIELDS, payload);
-        const { data } = await AdminService.create(createPayload);
+        const { data } = await EstablishmentService.create(createPayload);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
 });
 
-export const update = createAsyncThunk('admin/update', async (payload: any, thunkAPI: any) => {
+export const update = createAsyncThunk('establishment/update', async (payload: any, thunkAPI: any) => {
     try {
         const { id } = payload;
         const updatePayload = parseTrustedFields(UPDATE_FIELDS, payload);
-        const { data } = await AdminService.update(id, updatePayload);
+        const { data } = await EstablishmentService.update(id, updatePayload);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
 });
 
-export const remove = createAsyncThunk('admin/remove', async (id: string | number, thunkAPI: any) => {
+export const remove = createAsyncThunk('establishment/remove', async (id: string | number, thunkAPI: any) => {
     try {
-        const res = await AdminService.remove(id);
+        const res = await EstablishmentService.remove(id);
         return id;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
@@ -86,7 +86,7 @@ export const remove = createAsyncThunk('admin/remove', async (id: string | numbe
 });
 
 export const slice = createSlice({
-    name: 'admin',
+    name: 'establishment',
     initialState,
     reducers: {
         setPage: (state, action) => {

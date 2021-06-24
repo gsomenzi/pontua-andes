@@ -100,10 +100,3 @@ export default class HttpClient {
         return localStorage.getItem('access_token') ? localStorage.getItem('access_token') : null;
     }
 }
-
-function normalizeJson(object: any) {
-    if (!object) {
-        return null;
-    }
-    return JSON.parse(JSON.stringify(object));
-}

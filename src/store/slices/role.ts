@@ -57,7 +57,7 @@ export const remove = createAsyncThunk('role/remove', async (id: string | number
 });
 
 export const slice = createSlice({
-    name: 'user',
+    name: 'role',
     initialState,
     reducers: {
         setPage: (state, action) => {

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import admin from './slices/admin';
 import auth from './slices/auth';
 import category from './slices/category';
+import establishment from './slices/establishment';
 import role from './slices/role';
 import statistic from './slices/statistic';
 import user from './slices/user';
@@ -17,6 +18,7 @@ const store = configureStore({
         admin,
         auth,
         category,
+        establishment,
         role,
         statistic,
         user,
