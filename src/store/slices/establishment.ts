@@ -17,7 +17,7 @@ type EstablishmentState = {
         qty: number;
         last: number;
     };
-    order: 'alfabetica' | 'alfabetica-desc';
+    order: 'razao_social' | 'razao_social-desc' | 'pontos' | 'pontos-desc' | 'cidade' | 'cidade-desc';
 };
 
 const initialState: EstablishmentState = {
@@ -32,7 +32,7 @@ const initialState: EstablishmentState = {
         qty: 25,
         last: 1,
     },
-    order: 'alfabetica',
+    order: 'razao_social',
 };
 
 export const getAll = createAsyncThunk('establishment/getAll', async (payload: undefined, thunkAPI: any) => {

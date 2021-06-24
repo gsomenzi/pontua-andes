@@ -15,10 +15,42 @@ import BreadCrumbs from '../../components/atoms/BreadCrumbs';
 import PageContainer from '../../components/atoms/PageContainer';
 import Drawer from '../../components/molecules/Drawer';
 import PageHeader from '../../components/molecules/PageHeader';
+import EstablishmentsForm from '../../components/organisms/Establishments/Form';
 import { RootState } from '../../store';
 import { getAll, search, setPage, setOrder, remove } from '../../store/slices/establishment';
 import ConfirmDialog from '../../components/molecules/ConfirmDialog';
 import Pagination from '../../components/organisms/Layout/Pagination';
+
+function EstablishmentType(props: any) {
+    const { establishment } = props;
+    switch (establishment.tipo) {
+        case 'pessoa_juridica':
+            return <span>PJ</span>;
+        case 'pessoa_fisica':
+            return <span>PF</span>;
+        default:
+            return <span>-</span>;
+    }
+}
+
+function EstablishmentoId(props: any) {
+    const { establishment } = props;
+    return (
+        <div className="d-flex align-items-center">
+            {establishment.perfil ? (
+                <div className="mr-2">
+                    <img className="user-avatar" src={establishment.perfil.avatar} />
+                </div>
+            ) : null}
+            <Link to={`/estabelecimentos/${establishment.id}`}>
+                <p className="mt-0 mb-0 font-weight-bold">{establishment.razao_social}</p>
+                <p className="mt-0 mb-0">
+                    {establishment.tipo === 'pessoa_fisica' ? establishment.cpf : establishment.cnpj}
+                </p>
+            </Link>
+        </div>
+    );
+}
 
 /**
  * Breadcrumbs no topo da página
@@ -34,7 +66,7 @@ export default function Establishments() {
     const [selected, setSelected] = useState({ id: 0 });
     const [openActionDropdown, setOpenActionDropdown] = useState();
     const dispatch = useDispatch();
-    const { getting, removing, items, error, pagination, order } = useSelector(
+    const { creating, updating, getting, removing, items, error, pagination, order } = useSelector(
         (state: RootState) => state.establishment
     );
 
@@ -97,13 +129,14 @@ export default function Establishments() {
         setShowRemoveModal(true);
     }
 
-    // function submit(values: any) {
-    //     if (selected && selected.id) {
-    //         dispatch(update({ ...values, id: selected.id }));
-    //     } else {
-    //         dispatch(create(values));
-    //     }
-    // }
+    function submit(values: any) {
+        console.log(values);
+        // if (selected && selected.id) {
+        //     dispatch(update({ ...values, id: selected.id }));
+        // } else {
+        //     dispatch(create(values));
+        // }
+    }
 
     /**
      * Renderiza os itens na tabela de estabelecimentos
@@ -116,7 +149,18 @@ export default function Establishments() {
                         {/* Index */}
                         <td className="compact">{i + 1}</td>
                         {/* NOME e EMAIL */}
-                        <td>{item.razao_social}</td>
+                        <td>
+                            <EstablishmentoId establishment={item} />
+                        </td>
+                        <td className="compact">
+                            <EstablishmentType establishment={item} />
+                        </td>
+                        <td className="compact">
+                            {item.cidade || '-'}/{item.estado || '-'}
+                        </td>
+                        <td className="compact">{item.categoria ? item.categoria.nome : '-'}</td>
+                        <td className="compact">{item.qtde_usuarios || '0'}</td>
+                        <td className="compact">{item.pontos}</td>
                         <td className="compact">
                             <ButtonGroup size="sm">
                                 {/* <Button onClick={(ev) => openEdit(item)} size="sm" color="primary">
@@ -155,26 +199,43 @@ export default function Establishments() {
                 handleSearch={handleSearch}
                 sortable
                 sortableOptions={[
-                    { value: 'alfabetica', label: 'A-z ⬇' },
-                    { value: 'alfabetica-desc', label: 'A-z ⬆' },
+                    { value: 'razao_social', label: 'A-z ⬇' },
+                    { value: 'razao_social-desc', label: 'A-z ⬆' },
+                    { value: 'cidade', label: 'Cidade ⬇' },
+                    { value: 'cidade-desc', label: 'Cidade ⬆' },
                     { value: 'pontos', label: 'Pontos ⬆' },
                     { value: 'pontos-desc', label: 'Pontos ⬇' },
                 ]}
                 handleSort={handleSort}
+                actions={[
+                    <Button key="add" onClick={openAdd}>
+                        Adicionar
+                    </Button>,
+                ]}
             />
             <Table bordered striped hover responsive>
                 <thead>
                     <tr>
                         <th className="compact">#</th>
                         <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Cidade/UF</th>
+                        <th>Categoria</th>
+                        <th>Usuários</th>
                         <th>Pontos</th>
-                        <th>Ações</th>
+                        <th className="text-right">Ações</th>
                     </tr>
                 </thead>
                 <tbody>{renderItems()}</tbody>
             </Table>
             <Pagination data={pagination} onNavigate={(page: number) => dispatch(setPage(page))} />
-            <Drawer open={openDrawer} setOpen={setOpenDrawer} title="Editar estabelecimento"></Drawer>
+            <Drawer open={openDrawer} setOpen={setOpenDrawer} title="Editar estabelecimento">
+                <EstablishmentsForm
+                    loading={creating || updating}
+                    establishment={selected ? selected : undefined}
+                    onSubmit={submit}
+                />
+            </Drawer>
             <ConfirmDialog
                 title="Remover o item?"
                 text="Você tem certeza que deseja remover este item?"
