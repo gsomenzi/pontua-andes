@@ -29,6 +29,7 @@ const CREATE_FIELDS = [
 const UPDATE_FIELDS = [...CREATE_FIELDS];
 
 type EstablishmentState = {
+    item: any;
     items: any[];
     error: any;
     creating: boolean;
@@ -44,6 +45,7 @@ type EstablishmentState = {
 };
 
 const initialState: EstablishmentState = {
+    item: null,
     items: [],
     error: null,
     creating: false,
@@ -72,6 +74,15 @@ export const search = createAsyncThunk('establishment/search', async (term: stri
     try {
         const { pagination, order } = thunkAPI.getState().establishment;
         const { data } = await EstablishmentService.search(term, pagination.page, pagination.qty, order);
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
+
+export const getOne = createAsyncThunk('establishment/getOne', async (id: number | string, thunkAPI: any) => {
+    try {
+        const { data } = await EstablishmentService.getOne(id);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
@@ -153,6 +164,21 @@ export const slice = createSlice({
                 state.items = action.payload.data;
             })
             .addCase(search.rejected, (state, action: PayloadAction<any>) => {
+                state.getting = false;
+                state.error = action.payload.error;
+            })
+            // GETONE
+            .addCase(getOne.pending, (state) => {
+                state.item = null;
+                state.getting = true;
+                state.error = null;
+            })
+            .addCase(getOne.fulfilled, (state, action: PayloadAction<any>) => {
+                state.getting = false;
+                const { data } = action.payload;
+                state.item = data;
+            })
+            .addCase(getOne.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
                 state.error = action.payload.error;
             })

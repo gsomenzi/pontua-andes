@@ -21,6 +21,11 @@ export default class EstablishmentService {
         const res = await httpClient.get(url);
         return res;
     }
+    static async getOne(id: number | string): Promise<any> {
+        const url = `/admin/estabelecimentos/${id}`;
+        const res = await httpClient.get(url);
+        return res;
+    }
     static async create(payload: EstablishmentCreatePayload): Promise<any> {
         const url = '/admin/estabelecimentos';
         const res = await httpClient.post(url, payload);
