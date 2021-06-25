@@ -2,8 +2,31 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import EstablishmentService from '../../services/establishment';
 import { parseTrustedFields } from '../../tools';
 
-const CREATE_FIELDS = ['razao_social'];
-const UPDATE_FIELDS = ['razao_social'];
+const CREATE_FIELDS = [
+    'razao_social',
+    'nome_fantasia',
+    'tipo',
+    'cnpj',
+    'cpf',
+    'categorias_id',
+    'email',
+    'telefone',
+    'whatsapp',
+    'facebook',
+    'instagram',
+    'site',
+    'cep',
+    'estado',
+    'cidade',
+    'bairro',
+    'logradouro',
+    'numero',
+    'complemento',
+    'regras',
+    'dias_expiracao_pontos',
+    'status',
+];
+const UPDATE_FIELDS = [...CREATE_FIELDS];
 
 type EstablishmentState = {
     items: any[];

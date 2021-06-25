@@ -17,7 +17,7 @@ import Drawer from '../../components/molecules/Drawer';
 import PageHeader from '../../components/molecules/PageHeader';
 import EstablishmentsForm from '../../components/organisms/Establishments/Form';
 import { RootState } from '../../store';
-import { getAll, search, setPage, setOrder, remove } from '../../store/slices/establishment';
+import { getAll, search, create, update, setPage, setOrder, remove } from '../../store/slices/establishment';
 import ConfirmDialog from '../../components/molecules/ConfirmDialog';
 import Pagination from '../../components/organisms/Layout/Pagination';
 
@@ -130,12 +130,11 @@ export default function Establishments() {
     }
 
     function submit(values: any) {
-        console.log(values);
-        // if (selected && selected.id) {
-        //     dispatch(update({ ...values, id: selected.id }));
-        // } else {
-        //     dispatch(create(values));
-        // }
+        if (selected && selected.id) {
+            dispatch(update({ ...values, id: selected.id }));
+        } else {
+            dispatch(create(values));
+        }
     }
 
     /**
@@ -163,9 +162,9 @@ export default function Establishments() {
                         <td className="compact">{item.pontos}</td>
                         <td className="compact">
                             <ButtonGroup size="sm">
-                                {/* <Button onClick={(ev) => openEdit(item)} size="sm" color="primary">
+                                <Button onClick={(ev) => openEdit(item)} size="sm" color="primary">
                                     {updating && selected && selected.id === item.id ? <Spinner size="sm" /> : 'Editar'}
-                                </Button> */}
+                                </Button>
                                 <ButtonDropdown
                                     isOpen={openActionDropdown === item.id}
                                     toggle={() => handleMoreDropdown(item.id)}
