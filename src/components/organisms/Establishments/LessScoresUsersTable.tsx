@@ -2,7 +2,7 @@ import React from 'react';
 import { Table } from 'reactstrap';
 
 type Props = {
-    data: StatisticData | null;
+    data: EstablishmentStatisticData | null;
 };
 
 export default function LessScoresUsersTable(props: Props) {

@@ -3,12 +3,14 @@ import StatisticService from '../../services/statistic';
 
 type StatisticState = {
     loading: boolean;
-    data: any;
+    data: StatisticData | null;
+    establishmentData: EstablishmentStatisticData | null;
     error: any;
 };
 
 const initialState: StatisticState = {
     data: null,
+    establishmentData: null,
     error: null,
     loading: false,
 };
@@ -21,6 +23,18 @@ export const getAll = createAsyncThunk('statistic/getAll', async (payload: undef
         return rejectWithValue(e.response && e.response.data ? e.response.data : e);
     }
 });
+
+export const getByEstablishment = createAsyncThunk(
+    'statistic/getByEstablishment',
+    async (id: number | string, { rejectWithValue }) => {
+        try {
+            const { data } = await StatisticService.getByEstablishment(id);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        }
+    }
+);
 
 export const slice = createSlice({
     name: 'statistic',
@@ -38,6 +52,20 @@ export const slice = createSlice({
                 state.data = action.payload;
             })
             .addCase(getAll.rejected, (state, action: PayloadAction<any>) => {
+                state.loading = false;
+                state.error = action.payload.error;
+            })
+            // GETBYESTABLISHMENT
+            .addCase(getByEstablishment.pending, (state) => {
+                state.loading = true;
+                state.establishmentData = null;
+                state.error = null;
+            })
+            .addCase(getByEstablishment.fulfilled, (state, action: PayloadAction<any>) => {
+                state.loading = false;
+                state.establishmentData = action.payload;
+            })
+            .addCase(getByEstablishment.rejected, (state, action: PayloadAction<any>) => {
                 state.loading = false;
                 state.error = action.payload.error;
             });
