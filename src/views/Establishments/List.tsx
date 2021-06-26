@@ -33,7 +33,7 @@ function EstablishmentType(props: any) {
     }
 }
 
-function EstablishmentoId(props: any) {
+function EstablishmentId(props: any) {
     const { establishment } = props;
     return (
         <div className="d-flex align-items-center">
@@ -149,7 +149,7 @@ export default function Establishments() {
                         <td className="compact">{i + 1}</td>
                         {/* NOME e EMAIL */}
                         <td>
-                            <EstablishmentoId establishment={item} />
+                            <EstablishmentId establishment={item} />
                         </td>
                         <td className="compact">
                             <EstablishmentType establishment={item} />
