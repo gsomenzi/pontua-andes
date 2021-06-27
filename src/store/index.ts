@@ -6,6 +6,7 @@ import auth from './slices/auth';
 import category from './slices/category';
 import establishment from './slices/establishment';
 import establishmentAdmin from './slices/establishmentAdmin';
+import establishmentImage from './slices/establishmentImage';
 import role from './slices/role';
 import statistic from './slices/statistic';
 import user from './slices/user';
@@ -21,6 +22,7 @@ const store = configureStore({
         category,
         establishment,
         establishmentAdmin,
+        establishmentImage,
         role,
         statistic,
         user,

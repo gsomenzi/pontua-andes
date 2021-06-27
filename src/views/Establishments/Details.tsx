@@ -13,6 +13,7 @@ import 'moment/locale/pt-br';
 import { TabDashboard } from '../../components/organisms/Establishments/TabDashboard';
 import { TabInfos } from '../../components/organisms/Establishments/TabInfos';
 import TabAdmins from '../../components/organisms/Establishments/TabAdmins';
+import TabImages from '../../components/organisms/Establishments/TabImages';
 
 type Props = {
     match: any;
@@ -130,7 +131,7 @@ export default function UserDetails(props: Props) {
                                     <TabInfos establishment={item} />
                                 </TabPane>
                                 <TabPane tabId={2}>
-                                    <TabInfos establishment={item} />
+                                    <TabImages establishment={item} />
                                 </TabPane>
                                 <TabPane tabId={3}>
                                     <TabAdmins establishment={item} />

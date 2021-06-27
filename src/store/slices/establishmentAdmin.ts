@@ -39,7 +39,7 @@ export const getAllByEstablishment = createAsyncThunk(
     'establishmentAdmin/getAllByEstablishment',
     async (id: number | string, thunkAPI: any) => {
         try {
-            const { pagination, order } = thunkAPI.getState().admin;
+            const { pagination, order } = thunkAPI.getState().establishmentAdmin;
             const { data } = await AdminService.getAllByEstablishment(id, pagination.page, pagination.qty, order);
             return data;
         } catch (e) {

@@ -3,10 +3,17 @@ const httpClient = new HttpClient();
 
 type AdminCreatePayload = {
     nome: string;
+    email: string;
+    senha: string;
+    estabelecimentos_id: string | number;
+    funcoes_estabelecimentos_id: string | number;
 };
 
 type AdminUpdatePayload = {
-    nome: string;
+    nome?: string;
+    email?: string;
+    senha?: string;
+    funcoes_estabelecimentos_id?: string | number;
 };
 
 export default class EstablishmentAdminService {
