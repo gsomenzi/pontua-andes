@@ -95,11 +95,18 @@ export default function TabAdmins(props: Props) {
 
     function submit(values: any) {
         console.log({ ...values, estabelecimentos_id: establishment.id });
-        // if (selected && selected.id) {
-        //     dispatch(update({ ...values, estabelecimentos_id: establishment.id, id: selected.id }));
-        // } else {
-        //     dispatch(create({ ...values, estabelecimentos_id: establishment.id }));
-        // }
+        if (selected && selected.id) {
+            dispatch(
+                update({
+                    ...values,
+                    estabelecimentos_id: establishment.id,
+                    funcoes_estabelecimentos_id: 1,
+                    id: selected.id,
+                })
+            );
+        } else {
+            dispatch(create({ ...values, estabelecimentos_id: establishment.id, funcoes_estabelecimentos_id: 1 }));
+        }
     }
     /**
      * Renderiza itens da tabela
@@ -136,10 +143,12 @@ export default function TabAdmins(props: Props) {
     }
     return (
         <div>
-            {getting ? <Spinner /> : null}
-            <Button key="add" onClick={openAdd}>
-                Adicionar
-            </Button>
+            <div className="d-flex align-items-center pb-2">
+                <Button className="mr-1" onClick={openAdd}>
+                    Adicionar
+                </Button>
+                {getting ? <Spinner /> : null}
+            </div>
             <Table bordered striped>
                 <thead>
                     <tr>

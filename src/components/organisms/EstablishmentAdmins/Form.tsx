@@ -104,18 +104,16 @@ export default function Form(props: Props) {
             </FormGroup>
             {/* SENHA */}
             {admin && admin.id ? (
-                <div style={{ position: 'relative' }}>
-                    <FormGroup>
-                        <CustomInput
-                            type="switch"
-                            id="exampleCustomSwitch"
-                            name="customSwitch"
-                            label="Resetar senha"
-                            checked={resetPassword}
-                            onChange={(ev) => setResetPassword(ev.target.checked)}
-                        />
-                    </FormGroup>
-                </div>
+                <FormGroup>
+                    <CustomInput
+                        type="switch"
+                        id="senha"
+                        name="senha"
+                        label="Resetar senha"
+                        checked={resetPassword}
+                        onChange={(ev) => setResetPassword(ev.target.checked)}
+                    />
+                </FormGroup>
             ) : null}
             {!admin || !admin.id || resetPassword ? (
                 <FormGroup>

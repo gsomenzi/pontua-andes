@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import AdminService from '../../services/establishmentAdmin';
 import { parseTrustedFields } from '../../tools';
 
-const CREATE_FIELDS = ['nome', 'email', 'senha'];
-const UPDATE_FIELDS = ['nome', 'email', 'senha'];
+const CREATE_FIELDS = ['nome', 'email', 'senha', 'estabelecimentos_id', 'funcoes_estabelecimentos_id'];
+const UPDATE_FIELDS = ['nome', 'email', 'senha', 'estabelecimentos_id', 'funcoes_estabelecimentos_id'];
 
 type EstablishmentAdminState = {
     items: any[];
