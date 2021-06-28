@@ -33,6 +33,15 @@ export default class HttpClient {
         });
     }
 
+    async upload(url: string, formData: FormData) {
+        return await this.client.post(url, formData, {
+            cancelToken: source.token,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    }
+
     /**
      * Efetua uma requisição do tipo POST
      * @param url URL de destino da requisição

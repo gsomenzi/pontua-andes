@@ -7,7 +7,7 @@ import ImageService from '../../services/establishmentImage';
 type EstablishmentImageState = {
     items: any[];
     error: any;
-    creating: boolean;
+    uploading: boolean;
     updating: boolean;
     getting: boolean;
     removing: boolean;
@@ -17,7 +17,7 @@ type EstablishmentImageState = {
 const initialState: EstablishmentImageState = {
     items: [],
     error: null,
-    creating: false,
+    uploading: false,
     updating: false,
     getting: false,
     removing: false,
@@ -35,6 +35,16 @@ export const getAllByEstablishment = createAsyncThunk(
         }
     }
 );
+
+export const upload = createAsyncThunk('establishmentImage/upload', async (payload: any, thunkAPI: any) => {
+    try {
+        const { id, file } = payload;
+        const { data } = await ImageService.upload(id, file);
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
 
 // export const create = createAsyncThunk('establishmentAdmin/create', async (payload: any, thunkAPI: any) => {
 //     try {
@@ -86,19 +96,21 @@ export const slice = createSlice({
                 state.getting = false;
                 state.error = action.payload.error;
             })
-            // CREATE
-            // .addCase(create.pending, (state) => {
-            //     state.creating = true;
-            //     state.error = null;
-            // })
-            // .addCase(create.fulfilled, (state, action: PayloadAction<any>) => {
-            //     state.creating = false;
-            //     state.items.splice(0, 0, action.payload);
-            // })
-            // .addCase(create.rejected, (state, action: PayloadAction<any>) => {
-            //     state.creating = false;
-            //     state.error = action.payload.error;
-            // })
+            // UPLOAD
+            .addCase(upload.pending, (state) => {
+                state.uploading = true;
+                state.error = null;
+            })
+            .addCase(upload.fulfilled, (state, action: PayloadAction<any>) => {
+                console.log('UPLOAD OK', action.payload);
+                state.uploading = false;
+                state.items.splice(0, 0, action.payload);
+            })
+            .addCase(upload.rejected, (state, action: PayloadAction<any>) => {
+                console.log('UPLOAD FAIL', action.payload);
+                state.uploading = false;
+                state.error = action.payload.error;
+            })
             // UPDATE
             // .addCase(update.pending, (state) => {
             //     state.updating = true;

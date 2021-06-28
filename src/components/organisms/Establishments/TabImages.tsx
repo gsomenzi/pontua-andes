@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllByEstablishment, remove } from '../../../store/slices/establishmentImage';
 import { RootState } from '../../../store';
 import { Card, CardImg, CardBody, CardLink, Spinner } from 'reactstrap';
 import ConfirmDialog from '../../molecules/ConfirmDialog';
+import { useDropzone } from 'react-dropzone';
+import { upload } from '../../../store/slices/establishmentImage';
 
 type Props = {
     establishment: any;
@@ -16,12 +18,19 @@ export default function TabImages(props: Props) {
     const [openActionDropdown, setOpenActionDropdown] = useState();
     const dispatch = useDispatch();
     const { establishment } = props;
-    const { creating, getting, updating, removing, error, items } = useSelector(
+    const { uploading, getting, updating, removing, error, items } = useSelector(
         (state: RootState) => state.establishmentImage
     );
-    useEffect(() => {
-        console.log(items);
-    }, [items]);
+    // DROPZONE
+    const onDrop = useCallback((acceptedFiles) => {
+        dispatch(
+            upload({
+                id: establishment.id,
+                file: acceptedFiles[0],
+            })
+        );
+    }, []);
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
     /**
      * Busca todas as imagens do estabelecimento
      */
@@ -88,6 +97,14 @@ export default function TabImages(props: Props) {
     return (
         <div>
             {getting ? <Spinner /> : null}
+            <div {...getRootProps({ className: 'dropzone' })}>
+                <input {...getInputProps()} />
+                {isDragActive ? (
+                    <p>Drop the files here ...</p>
+                ) : (
+                    <p>Drag n drop some files here, or click to select files</p>
+                )}
+            </div>
             <div className="row">{renderItems()}</div>
             <ConfirmDialog
                 title="Remover o item?"
