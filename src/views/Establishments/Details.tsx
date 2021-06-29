@@ -14,6 +14,7 @@ import { TabDashboard } from '../../components/organisms/Establishments/TabDashb
 import { TabInfos } from '../../components/organisms/Establishments/TabInfos';
 import TabAdmins from '../../components/organisms/Establishments/TabAdmins';
 import TabImages from '../../components/organisms/Establishments/TabImages';
+import TabProducts from '../../components/organisms/Establishments/TabProducts';
 
 type Props = {
     match: any;
@@ -135,6 +136,9 @@ export default function UserDetails(props: Props) {
                                 </TabPane>
                                 <TabPane tabId={3}>
                                     <TabAdmins establishment={item} />
+                                </TabPane>
+                                <TabPane tabId={4}>
+                                    <TabProducts establishment={item} />
                                 </TabPane>
                             </TabContent>
                         </div>
