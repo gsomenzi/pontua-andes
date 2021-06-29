@@ -2,8 +2,17 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ProductService from '../../services/product';
 import { parseTrustedFields } from '../../tools';
 
-const CREATE_FIELDS = ['nome'];
-const UPDATE_FIELDS = ['nome'];
+const CREATE_FIELDS = [
+    'nome',
+    'descricao',
+    'tipo_pontuacao',
+    'pontos',
+    'quantidade',
+    'ativo',
+    'regras',
+    'estabelecimentos_id',
+];
+const UPDATE_FIELDS = ['nome', 'descricao', 'tipo_pontuacao', 'pontos', 'quantidade', 'ativo', 'regras'];
 
 type ProductState = {
     items: any[];

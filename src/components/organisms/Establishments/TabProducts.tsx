@@ -13,7 +13,7 @@ import {
     Table,
 } from 'reactstrap';
 import ConfirmDialog from '../../molecules/ConfirmDialog';
-import EstablishmentAdminsForm from '../EstablishmentAdmins/Form';
+import ProductsForm from '../Products/Form';
 import Drawer from '../../molecules/Drawer';
 
 /**
@@ -155,12 +155,12 @@ export default function TabProducts(props: Props) {
                 </thead>
                 <tbody>{renderItems()}</tbody>
             </Table>
-            <Drawer open={openDrawer} setOpen={setOpenDrawer} title="Editar admin">
-                {/* <EstablishmentAdminsForm
+            <Drawer open={openDrawer} setOpen={setOpenDrawer} title="Editar prêmio">
+                <ProductsForm
                     loading={creating || updating}
-                    admin={selected ? selected : undefined}
+                    product={selected ? selected : undefined}
                     onSubmit={submit}
-                /> */}
+                />
             </Drawer>
             <ConfirmDialog
                 title="Remover o item?"

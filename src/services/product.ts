@@ -3,17 +3,23 @@ const httpClient = new HttpClient();
 
 type ProductCreatePayload = {
     nome: string;
-    email: string;
-    senha: string;
+    descricao: string;
+    tipo_pontuacao: 'pontos' | 'quantidade';
+    pontos?: number;
+    quantidade?: number;
+    ativo: boolean;
+    regras: string;
     estabelecimentos_id: string | number;
-    funcoes_estabelecimentos_id: string | number;
 };
 
 type ProductUpdatePayload = {
     nome?: string;
-    email?: string;
-    senha?: string;
-    funcoes_estabelecimentos_id?: string | number;
+    descricao?: string;
+    tipo_pontuacao?: 'pontos' | 'quantidade';
+    pontos?: number;
+    quantidade?: number;
+    ativo?: boolean;
+    regras?: string;
 };
 
 export default class ProductService {
