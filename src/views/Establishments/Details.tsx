@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, CardBody, CardHeader, CardTitle, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import { Button, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import BreadCrumbs from '../../components/atoms/BreadCrumbs';
 import PageContainer from '../../components/atoms/PageContainer';
 import PageHeader from '../../components/molecules/PageHeader';
 import { RootState } from '../../store';
 import { getOne } from '../../store/slices/establishment';
 import { getByEstablishment } from '../../store/slices/statistic';
-import moment from 'moment';
-import 'moment/locale/pt-br';
 import { TabDashboard } from '../../components/organisms/Establishments/TabDashboard';
 import { TabInfos } from '../../components/organisms/Establishments/TabInfos';
 import TabAdmins from '../../components/organisms/Establishments/TabAdmins';
 import TabImages from '../../components/organisms/Establishments/TabImages';
 import TabProducts from '../../components/organisms/Establishments/TabProducts';
+import TabSales from '../../components/organisms/Establishments/TabSales';
 
 type Props = {
     match: any;
@@ -139,6 +138,9 @@ export default function UserDetails(props: Props) {
                                 </TabPane>
                                 <TabPane tabId={4}>
                                     <TabProducts establishment={item} />
+                                </TabPane>
+                                <TabPane tabId={5}>
+                                    <TabSales establishment={item} />
                                 </TabPane>
                             </TabContent>
                         </div>
