@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { Alert, Button, Form as BootstrapForm, FormGroup, Label, Input, FormFeedback, Spinner } from 'reactstrap';
 import './Form.scss';
 import { RootState } from '../../../store';
-import { signIn } from '../../../store/slices/auth';
+import { signIn, getCurrentUser } from '../../../store/slices/auth';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().email('Por favor insira um e-mail válido').required('Por favor insira um e-mail'),
@@ -25,8 +25,9 @@ export default function Form() {
     });
     const { values, handleChange, handleBlur, errors, touched } = formik;
 
-    function submit(fields: any) {
-        dispatch(signIn({ email: fields.email, password: fields.password }));
+    async function submit(fields: any) {
+        await dispatch(signIn({ email: fields.email, password: fields.password }));
+        dispatch(getCurrentUser());
     }
 
     return (

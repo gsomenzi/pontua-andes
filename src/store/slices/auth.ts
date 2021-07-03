@@ -3,14 +3,18 @@ import AuthService from '../../services/auth';
 
 type AuthState = {
     authenticating: boolean;
+    getting: boolean;
     access_token: string | null;
     error: any;
+    userData: UserData | null;
 };
 
 const initialState: AuthState = {
     access_token: null,
     error: null,
     authenticating: false,
+    getting: false,
+    userData: null,
 };
 
 export const signIn = createAsyncThunk('auth/signIn', async (payload: any, { rejectWithValue }) => {
@@ -24,6 +28,19 @@ export const signIn = createAsyncThunk('auth/signIn', async (payload: any, { rej
     }
 });
 
+export const getCurrentUser = createAsyncThunk(
+    'auth/getCurrentUser',
+    async (payload: undefined, { rejectWithValue }) => {
+        try {
+            const { data } = await AuthService.getCurrentUser();
+            AuthService.saveLocalUserData(data);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        }
+    }
+);
+
 export const slice = createSlice({
     name: 'auth',
     initialState,
@@ -31,6 +48,9 @@ export const slice = createSlice({
         getLocalAccessToken: (state) => {
             const token = localStorage.getItem('access_token') ? localStorage.getItem('access_token') : null;
             state.access_token = token;
+        },
+        getLocalUserData: (state) => {
+            state.userData = AuthService.getLocalUserData();
         },
         signOut: (state) => {
             localStorage.clear();
@@ -52,10 +72,24 @@ export const slice = createSlice({
             .addCase(signIn.rejected, (state, action: PayloadAction<any>) => {
                 state.authenticating = false;
                 state.error = action.payload.error;
+            })
+            // GET CURRENT USER
+            .addCase(getCurrentUser.pending, (state) => {
+                state.getting = true;
+                state.error = null;
+                state.userData = null;
+            })
+            .addCase(getCurrentUser.fulfilled, (state, action: PayloadAction<any>) => {
+                state.getting = false;
+                state.userData = action.payload;
+            })
+            .addCase(getCurrentUser.rejected, (state, action: PayloadAction<any>) => {
+                state.getting = false;
+                state.error = action.payload.error;
             });
     },
 });
 
-export const { getLocalAccessToken, signOut } = slice.actions;
+export const { getLocalAccessToken, getLocalUserData, signOut } = slice.actions;
 
 export default slice.reducer;

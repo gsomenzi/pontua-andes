@@ -4,7 +4,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import PageLoader from './components/molecules/PageLoader';
 import Sidebar from './components/organisms/Layout/Sidebar';
 import { RootState } from './store';
-import { getLocalAccessToken } from './store/slices/auth';
+import { getLocalAccessToken, getLocalUserData } from './store/slices/auth';
 
 import Login from './views/auth/Login';
 import Home from './views/Home';
@@ -24,6 +24,7 @@ export default function Router() {
 
     async function initApp() {
         await dispatch(getLocalAccessToken());
+        await dispatch(getLocalUserData());
         setTimeout(() => setReady(true), 1000);
     }
 

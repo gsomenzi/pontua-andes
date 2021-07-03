@@ -1,13 +1,7 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { Form as BootstrapForm, FormGroup, Label, Input, FormFeedback, Button, Spinner, CustomInput } from 'reactstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import moment from 'moment';
-// import classNames from 'classnames';
-import 'moment/locale/pt-br';
-import 'flatpickr/dist/themes/light.css';
-// import { Portuguese } from 'flatpickr/dist/l10n/pt.js';
-// import Flatpickr from 'react-flatpickr';
 
 type Props = {
     /**
@@ -27,20 +21,34 @@ type Props = {
 /**
  * Campos que podem sofrer alteração em caso de edição
  */
-const EDITABLE_FIELDS = ['nome', 'descricao', 'valor', 'inicio_validade', 'final_validade', 'ativo'];
+const EDITABLE_FIELDS = ['nome', 'descricao', 'tipo_pontuacao', 'pontos', 'quantidade', 'ativo', 'regras'];
 /**
  * Schema para validação no form
  */
 const schema = Yup.object().shape({
     nome: Yup.string().required('Por favor insira um nome'),
     descricao: Yup.string().required('Por favor insira uma descrição'),
-    inicio_validade: Yup.string().required(),
-    final_validade: Yup.string().notRequired(),
-    ativo: Yup.bool().required(),
+    tipo_pontuacao: Yup.string()
+        .required('Por favor selecione o tipo de pontuação')
+        .oneOf(['pontos', 'quantidade'], 'Por favor selecione um tipo válido'),
+    pontos: Yup.number().when('tipo_pontuacao', {
+        is: 'pontos',
+        then: Yup.number()
+            .required('Por favor informe uma pontuação válida')
+            .min(1, 'A pontuação deve ser maior que 0'),
+    }),
+    quantidade: Yup.number().when('tipo_pontuacao', {
+        is: 'quantidade',
+        then: Yup.number()
+            .required('Por favor informe uma quantidade válida')
+            .min(1, 'A quantidade deve ser maior que 0'),
+    }),
+    ativo: Yup.bool(),
+    regras: Yup.string().required('Por favor informe as regras de pontuação do produto'),
 });
 
 /**
- * Formulário de adição e edição da promoção
+ * Formulário de adição e edição do produto
  */
 export default function Form(props: Props) {
     const { loading, sale, onSubmit } = props;
@@ -50,10 +58,11 @@ export default function Form(props: Props) {
         initialValues: {
             nome: '',
             descricao: '',
-            valor: 1,
-            inicio_validade: moment().toISOString(),
-            final_validade: moment().add(3, 'months').toISOString(),
+            tipo_pontuacao: 'pontos',
+            pontos: 1,
+            quantidade: 1,
             ativo: true,
+            regras: '',
         },
         validationSchema: schema,
         onSubmit: submit,
@@ -70,27 +79,18 @@ export default function Form(props: Props) {
             });
         }
     }, [sale]);
-    // INICIO VALIDADE
-    // const handleStartDate = useCallback((v: any) => {
-    // setFieldValue('inicio_validade', v && v.length ? v[0].toISOString() : null);
-    // }, []);
-    // FINAL VALIDADE
-    // const handleEndDate = useCallback((v: any) => {
-    // setFieldValue('final_validade', v && v.length ? v[0].toISOString() : null);
-    // }, []);
     // SUBMIT
     function submit(values: any) {
-        console.log(values);
-        // if (onSubmit) {
-        //     onSubmit(values);
-        // }
+        if (onSubmit) {
+            onSubmit(values);
+        }
     }
     // COMPONENTE
     return (
         <BootstrapForm onSubmit={handleSubmit}>
             {/* NOME */}
             <FormGroup>
-                <Label>Nome</Label>
+                <Label>Tîtulo</Label>
                 <Input
                     value={values.nome}
                     onBlur={handleBlur('nome')}
@@ -112,45 +112,13 @@ export default function Form(props: Props) {
                 />
                 <FormFeedback>{formErrors.descricao}</FormFeedback>
             </FormGroup>
-            {/* INICIO VALIDADE */}
-            {/* <FormGroup>
-                <Label>Válida desde</Label>
-                <Flatpickr
-                    className={classNames('form-control', {
-                        'is-invalid': !!formErrors.inicio_validade,
-                    })}
-                    defaultValue={values.inicio_validade}
-                    onChange={handleStartDate}
-                    options={{
-                        dateFormat: 'd/m/Y',
-                        locale: Portuguese,
-                    }}
-                />
-                <FormFeedback>{formErrors.inicio_validade}</FormFeedback>
-            </FormGroup> */}
-            {/* FINAL VALIDADE */}
-            {/* <FormGroup>
-                <Label>Válida até</Label>
-                <Flatpickr
-                    className={classNames('form-control', {
-                        'is-invalid': !!formErrors.final_validade,
-                    })}
-                    defaultValue={values.final_validade}
-                    onChange={handleEndDate}
-                    options={{
-                        dateFormat: 'd/m/Y',
-                        locale: Portuguese,
-                    }}
-                />
-                <FormFeedback>{formErrors.final_validade}</FormFeedback>
-            </FormGroup> */}
             {/* ATIVO */}
             <FormGroup>
                 <CustomInput
                     type="switch"
                     id="switchAtivo"
                     name="ativo"
-                    label="Promoção ativa no sistema"
+                    label="Prêmio ativo no sistema"
                     checked={values.ativo}
                     onChange={(ev) => setFieldValue('ativo', ev.target.checked)}
                 />

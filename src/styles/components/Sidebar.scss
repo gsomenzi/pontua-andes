@@ -46,4 +46,29 @@
     #main-sidebar .main-sidebar-menu .main-sidebar-menu-item.active {
         padding-left: 1rem;
     }
+    #main-sidebar .user-data {
+        padding: 1rem 0 !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #main-sidebar .user-avatar {
+        margin-right: 0 !important;
+    }
+    #main-sidebar .user-title {
+        display: none;
+    }
+}
+
+// AVATAR
+
+#main-sidebar .user-avatar {
+    display: block;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    background-color: #00000044;
+    border-radius: 50%;
+    margin-right: 0.5rem;
 }

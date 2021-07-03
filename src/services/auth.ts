@@ -12,7 +12,18 @@ export default class AuthService {
         const res = await httpClient.post('/admin/auth/login', payload);
         return res;
     }
+    static async getCurrentUser(): Promise<any> {
+        const res = await httpClient.get('/admin/auth/me');
+        return res;
+    }
     static saveLocalToken(token: string) {
         return localStorage.setItem('access_token', token);
+    }
+    static saveLocalUserData(userData: UserData) {
+        return localStorage.setItem('user_data', JSON.stringify(userData));
+    }
+    static getLocalUserData(): UserData | null {
+        const userData = JSON.parse(localStorage.getItem('user_data') || '');
+        return userData;
     }
 }
