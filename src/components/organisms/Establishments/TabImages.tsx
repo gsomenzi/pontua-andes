@@ -6,12 +6,13 @@ import { Card, CardImg, CardBody, CardLink, Spinner } from 'reactstrap';
 import ConfirmDialog from '../../molecules/ConfirmDialog';
 import Dropzone from '../../molecules/Dropzone';
 import { upload } from '../../../store/slices/establishmentImage';
+import EstablishmentImagesPreview from '../../molecules/EstablishmentImagesPreview';
 
-type Props = {
+type TabImageProps = {
     establishment: any;
 };
 
-export default function TabImages(props: Props) {
+export default function TabImages(props: TabImageProps) {
     const [showRemoveModal, setShowRemoveModal] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [selected, setSelected] = useState({ id: 0 });
@@ -68,16 +69,18 @@ export default function TabImages(props: Props) {
     function renderItems() {
         return items.map((item, i) => {
             return (
-                <div className="col-6 col-md-4" key={i}>
+                <div className="col-6 col-md-4 col-lg-3" key={i}>
                     <Card>
                         <CardImg src={item.quadrado} />
                         <CardBody>
-                            <CardLink className="text-primary" href="#">
-                                Usar capa
-                            </CardLink>
-                            <CardLink className="text-secondary" href="#">
-                                Usar perfil
-                            </CardLink>
+                            <div className="d-flex align-items-center">
+                                <CardLink className="text-primary text-nowrap" href="#">
+                                    Usar capa
+                                </CardLink>
+                                <CardLink className="text-secondary text-nowrap" href="#">
+                                    Usar perfil
+                                </CardLink>
+                            </div>
                         </CardBody>
                     </Card>
                 </div>
@@ -97,6 +100,11 @@ export default function TabImages(props: Props) {
                     );
                 }}
             />
+            <div className="row align-items-center">
+                <div className="col-12">
+                    <EstablishmentImagesPreview establishment={establishment} />
+                </div>
+            </div>
             <div className="row">{renderItems()}</div>
             <ConfirmDialog
                 title="Remover o item?"

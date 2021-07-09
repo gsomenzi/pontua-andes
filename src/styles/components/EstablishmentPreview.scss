@@ -1,0 +1,14 @@
+.establishment-image-preview-avatar {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    background-color: var(--primary);
+    color: #ffffff;
+    font-size: 24px;
+}
