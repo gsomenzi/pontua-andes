@@ -23,7 +23,7 @@ export default class AuthService {
         return localStorage.setItem('user_data', JSON.stringify(userData));
     }
     static getLocalUserData(): UserData | null {
-        const userData = JSON.parse(localStorage.getItem('user_data') || '');
+        const userData = localStorage.getItem('user_data') ? JSON.parse(localStorage.getItem('user_data') || '') : null;
         return userData;
     }
 }

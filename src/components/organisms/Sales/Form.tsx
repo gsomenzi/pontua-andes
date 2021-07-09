@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 import { Form as BootstrapForm, FormGroup, Label, Input, FormFeedback, Button, Spinner, CustomInput } from 'reactstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import Flatpickr from 'react-flatpickr';
+import 'flatpickr/dist/themes/light.css';
+import moment from 'moment';
+import classNames from 'classnames';
 
 type Props = {
     /**
@@ -21,31 +25,19 @@ type Props = {
 /**
  * Campos que podem sofrer alteração em caso de edição
  */
-const EDITABLE_FIELDS = ['nome', 'descricao', 'tipo_pontuacao', 'pontos', 'quantidade', 'ativo', 'regras'];
+const EDITABLE_FIELDS = ['nome', 'descricao', 'ativo'];
 /**
  * Schema para validação no form
  */
 const schema = Yup.object().shape({
     nome: Yup.string().required('Por favor insira um nome'),
     descricao: Yup.string().required('Por favor insira uma descrição'),
-    tipo_pontuacao: Yup.string()
-        .required('Por favor selecione o tipo de pontuação')
-        .oneOf(['pontos', 'quantidade'], 'Por favor selecione um tipo válido'),
-    pontos: Yup.number().when('tipo_pontuacao', {
-        is: 'pontos',
-        then: Yup.number()
-            .required('Por favor informe uma pontuação válida')
-            .min(1, 'A pontuação deve ser maior que 0'),
-    }),
-    quantidade: Yup.number().when('tipo_pontuacao', {
-        is: 'quantidade',
-        then: Yup.number()
-            .required('Por favor informe uma quantidade válida')
-            .min(1, 'A quantidade deve ser maior que 0'),
-    }),
+    inicio_validade: Yup.string().required('Por favor informe o início da validade'),
+    final_validade: Yup.string().required('Por favor informe o final da validade'),
     ativo: Yup.bool(),
-    regras: Yup.string().required('Por favor informe as regras de pontuação do produto'),
 });
+
+const DATE_FORMAT = 'DD/MM/YYYY';
 
 /**
  * Formulário de adição e edição do produto
@@ -58,11 +50,9 @@ export default function Form(props: Props) {
         initialValues: {
             nome: '',
             descricao: '',
-            tipo_pontuacao: 'pontos',
-            pontos: 1,
-            quantidade: 1,
+            inicio_validade: moment().format(DATE_FORMAT),
+            final_validade: moment().add(3, 'months').format(DATE_FORMAT),
             ativo: true,
-            regras: '',
         },
         validationSchema: schema,
         onSubmit: submit,
@@ -77,12 +67,25 @@ export default function Form(props: Props) {
                     setFieldValue(key, sale[key]);
                 }
             });
+            if (sale.inicio_validade) {
+                setFieldValue('inicio_validade', moment(sale.inicio_validade).format(DATE_FORMAT));
+            }
+            if (sale.final_validade) {
+                setFieldValue('final_validade', moment(sale.final_validade).format(DATE_FORMAT));
+            }
         }
     }, [sale]);
     // SUBMIT
     function submit(values: any) {
+        const finalValues = { ...values };
+        if (finalValues.inicio_validade) {
+            finalValues.inicio_validade = moment(finalValues.inicio_validade, DATE_FORMAT).format('YYYY-MM-DD');
+        }
+        if (finalValues.final_validade) {
+            finalValues.final_validade = moment(finalValues.final_validade, DATE_FORMAT).format('YYYY-MM-DD');
+        }
         if (onSubmit) {
-            onSubmit(values);
+            onSubmit(finalValues);
         }
     }
     // COMPONENTE
@@ -112,13 +115,47 @@ export default function Form(props: Props) {
                 />
                 <FormFeedback>{formErrors.descricao}</FormFeedback>
             </FormGroup>
+            {/* INICIO VALIDADE */}
+            <FormGroup>
+                <Label>Valida desde</Label>
+                <Flatpickr
+                    className={classNames('form-control', {
+                        'is-invalid': !!(formErrors.inicio_validade && touched.inicio_validade),
+                    })}
+                    value={values.inicio_validade}
+                    onChange={(date) => {
+                        setFieldValue('inicio_validade', date ? date[0] : '');
+                    }}
+                    options={{
+                        dateFormat: 'd/m/Y',
+                    }}
+                />
+                <FormFeedback>{formErrors.inicio_validade}</FormFeedback>
+            </FormGroup>
+            {/* FINAL VALIDADE */}
+            <FormGroup>
+                <Label>Valida até</Label>
+                <Flatpickr
+                    className={classNames('form-control', {
+                        'is-invalid': !!(formErrors.final_validade && touched.final_validade),
+                    })}
+                    value={values.final_validade}
+                    onChange={(date) => {
+                        setFieldValue('final_validade', date ? date[0] : '');
+                    }}
+                    options={{
+                        dateFormat: 'd/m/Y',
+                    }}
+                />
+                <FormFeedback>{formErrors.final_validade}</FormFeedback>
+            </FormGroup>
             {/* ATIVO */}
             <FormGroup>
                 <CustomInput
                     type="switch"
                     id="switchAtivo"
                     name="ativo"
-                    label="Prêmio ativo no sistema"
+                    label="Promoção ativa no sistema"
                     checked={values.ativo}
                     onChange={(ev) => setFieldValue('ativo', ev.target.checked)}
                 />
