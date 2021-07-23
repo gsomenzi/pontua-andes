@@ -19,13 +19,13 @@ export default class EstablishmentImageService {
     //     const res = await httpClient.post(url, payload);
     //     return res;
     // }
-    // static async update(id: string | number, payload: any): Promise<any> {
-    //     const url = `/admin/admins-estabelecimentos/${id}`;
-    //     const res = await httpClient.put(url, payload);
-    //     return res;
-    // }
+    static async update(id: string | number, payload: any): Promise<any> {
+        const url = `/admin/imagens-estabelecimentos/${id}`;
+        const res = await httpClient.put(url, payload);
+        return res;
+    }
     static async remove(id: number | string) {
-        const url = `/admin/admins-estabelecimentos/${id}`;
+        const url = `/admin/imagens-estabelecimentos/${id}`;
         const res = await httpClient.delete(url);
     }
 }

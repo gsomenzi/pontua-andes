@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import ImageService from '../../services/establishmentImage';
+import { parseTrustedFields } from '../../tools';
 
 // const CREATE_FIELDS = ['nome', 'email', 'senha', 'estabelecimentos_id', 'funcoes_estabelecimentos_id'];
-// const UPDATE_FIELDS = ['nome', 'email', 'senha', 'estabelecimentos_id', 'funcoes_estabelecimentos_id'];
+const UPDATE_FIELDS = ['capa', 'perfil'];
 
 type EstablishmentImageState = {
     items: any[];
@@ -46,26 +47,16 @@ export const upload = createAsyncThunk('establishmentImage/upload', async (paylo
     }
 });
 
-// export const create = createAsyncThunk('establishmentAdmin/create', async (payload: any, thunkAPI: any) => {
-//     try {
-//         const createPayload = parseTrustedFields(CREATE_FIELDS, payload);
-//         const { data } = await AdminService.create(createPayload);
-//         return data;
-//     } catch (e) {
-//         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
-//     }
-// });
-
-// export const update = createAsyncThunk('establishmentAdmin/update', async (payload: any, thunkAPI: any) => {
-//     try {
-//         const { id } = payload;
-//         const updatePayload = parseTrustedFields(UPDATE_FIELDS, payload);
-//         const { data } = await AdminService.update(id, updatePayload);
-//         return data;
-//     } catch (e) {
-//         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
-//     }
-// });
+export const update = createAsyncThunk('establishmentImage/update', async (payload: any, thunkAPI: any) => {
+    try {
+        const { id } = payload;
+        const updatePayload = parseTrustedFields(UPDATE_FIELDS, payload);
+        const { data } = await ImageService.update(id, updatePayload);
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
 
 export const remove = createAsyncThunk('establishmentImage/remove', async (id: string | number, thunkAPI: any) => {
     try {
@@ -112,20 +103,35 @@ export const slice = createSlice({
                 state.error = action.payload.error;
             })
             // UPDATE
-            // .addCase(update.pending, (state) => {
-            //     state.updating = true;
-            //     state.error = null;
-            // })
-            // .addCase(update.fulfilled, (state, action: PayloadAction<any>) => {
-            //     state.updating = false;
-            //     const { data } = action.payload;
-            //     const INDEX = state.items.findIndex((e) => e.id === data.id);
-            //     state.items.splice(INDEX, 1, data);
-            // })
-            // .addCase(update.rejected, (state, action: PayloadAction<any>) => {
-            //     state.updating = false;
-            //     state.error = action.payload.error;
-            // })
+            .addCase(update.pending, (state) => {
+                state.updating = true;
+                state.error = null;
+            })
+            .addCase(update.fulfilled, (state, action: PayloadAction<any>) => {
+                state.updating = false;
+                const isProfile = action.payload.perfil;
+                const isCover = action.payload.capa;
+                if (isProfile) {
+                    state.items.map((image: any, i: number) => {
+                        if (image.perfil) {
+                            state.items[i].perfil = false;
+                        }
+                    });
+                }
+                if (isCover) {
+                    state.items.map((image: any, i: number) => {
+                        if (image.capa) {
+                            state.items[i].capa = false;
+                        }
+                    });
+                }
+                const INDEX = state.items.findIndex((e) => e.id === action.payload.id);
+                state.items.splice(INDEX, 1, action.payload);
+            })
+            .addCase(update.rejected, (state, action: PayloadAction<any>) => {
+                state.updating = false;
+                state.error = action.payload.error;
+            })
             // REMOVE
             .addCase(remove.pending, (state) => {
                 state.removing = true;

@@ -11,7 +11,13 @@ function Avatar(props: any) {
         .map((word: string) => word.split('')[0])
         .join('')
         .substr(0, 2);
-    return <div className="establishment-image-preview-avatar">{initials}</div>;
+    return establishment.perfil ? (
+        <div className="establishment-image-preview-avatar">
+            <img src={establishment.perfil.avatar} />
+        </div>
+    ) : (
+        <div className="establishment-image-preview-avatar">{initials}</div>
+    );
 }
 function Background(props: any) {
     return <div>asd</div>;
