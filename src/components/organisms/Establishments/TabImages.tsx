@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setItemCover, setItemProfile } from '../../../store/slices/establishment';
 import { getAllByEstablishment, update, upload, remove } from '../../../store/slices/establishmentImage';
 import { RootState } from '../../../store';
-import { Card, CardImg, CardBody, CardLink, Spinner, Button } from 'reactstrap';
+import { Card, CardImg, CardBody, CardLink, Spinner, Button, ButtonGroup } from 'reactstrap';
 import ConfirmDialog from '../../molecules/ConfirmDialog';
 import Dropzone from '../../molecules/Dropzone';
 import EstablishmentImagesPreview from '../../molecules/EstablishmentImagesPreview';
@@ -42,12 +43,14 @@ export default function TabImages(props: TabImageProps) {
         e.preventDefault();
         setSelected(item);
         dispatch(update({ id: item.id, capa: true }));
+        dispatch(setItemCover(item));
     }
 
     function handleProfile(e: any, item: any) {
         e.preventDefault();
         setSelected(item);
         dispatch(update({ id: item.id, perfil: true }));
+        dispatch(setItemProfile(item));
     }
 
     /**
@@ -58,29 +61,31 @@ export default function TabImages(props: TabImageProps) {
             const isUpdating = selected && selected.id === item.id && updating;
             const isRemoving = selected && selected.id === item.id && removing;
             return (
-                <div className="col-6 col-md-4 col-lg-3" key={i}>
-                    <Card>
+                <div className="col-6 col-md-3 col-lg-2" key={i}>
+                    <Card style={{ marginBottom: '1rem' }}>
                         <CardImg src={item.quadrado} />
                         <CardBody>
                             <div className="d-flex align-items-center">
-                                {!item.capa ? (
-                                    <CardLink
-                                        className="text-primary text-nowrap"
-                                        href="#"
+                                <ButtonGroup style={{ width: '100%', marginBottom: '.5rem' }}>
+                                    <Button
+                                        className="text-nowrap"
+                                        disabled={!!item.capa}
+                                        color="primary"
+                                        href="/"
                                         onClick={(e: any) => handleCover(e, item)}
                                     >
-                                        {isUpdating ? <Spinner size="sm" /> : <span>Usar capa</span>}
-                                    </CardLink>
-                                ) : null}
-                                {!item.perfil ? (
-                                    <CardLink
-                                        className="text-secondary text-nowrap"
-                                        href="#"
+                                        {isUpdating ? <Spinner size="sm" /> : <span>Capa</span>}
+                                    </Button>
+                                    <Button
+                                        className="text-nowrap"
+                                        disabled={!!item.perfil}
+                                        color="secondary"
+                                        href="/"
                                         onClick={(e: any) => handleProfile(e, item)}
                                     >
-                                        {isUpdating ? <Spinner size="sm" /> : <span>Usar perfil</span>}
-                                    </CardLink>
-                                ) : null}
+                                        {isUpdating ? <Spinner size="sm" /> : <span>Perfil</span>}
+                                    </Button>
+                                </ButtonGroup>
                             </div>
                             <Button
                                 disabled={isRemoving}
@@ -115,7 +120,7 @@ export default function TabImages(props: TabImageProps) {
                     <EstablishmentImagesPreview establishment={establishment} />
                 </div>
             </div>
-            <div className="row">{renderItems()}</div>
+            <div className="row align-items-start">{renderItems()}</div>
             <ConfirmDialog
                 title="Remover o item?"
                 text="Você tem certeza que deseja remover este item?"

@@ -132,6 +132,12 @@ export const slice = createSlice({
         setOrder: (state, action) => {
             state.order = action.payload;
         },
+        setItemProfile: (state, action) => {
+            state.item.perfil = action.payload;
+        },
+        setItemCover: (state, action) => {
+            state.item.capa = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -226,6 +232,6 @@ export const slice = createSlice({
     },
 });
 
-export const { setPage, setQty, setOrder } = slice.actions;
+export const { setPage, setQty, setOrder, setItemCover, setItemProfile } = slice.actions;
 
 export default slice.reducer;

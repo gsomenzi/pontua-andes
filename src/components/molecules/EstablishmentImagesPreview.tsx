@@ -20,13 +20,19 @@ function Avatar(props: any) {
     );
 }
 function Background(props: any) {
-    return <div>asd</div>;
+    const { establishment } = props;
+    console.log(establishment.perfil ? establishment.perfil : null);
+    return (
+        <div className="establishment-image-preview-cover">
+            {establishment.perfil ? <img src={establishment.perfil.thumb} /> : null}
+        </div>
+    );
 }
 
 export default function EstablishmentImagesPreview(props: Props) {
     const { establishment } = props;
     return (
-        <div>
+        <div className="establishment-image-preview">
             <Background establishment={establishment} />
             <Avatar establishment={establishment} />
         </div>
