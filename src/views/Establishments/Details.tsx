@@ -24,7 +24,7 @@ type Props = {
  */
 const breadCrumbItems = [{ title: 'Estabelecimentos' }];
 
-export default function UserDetails(props: Props) {
+export default function EstablishmentDetails(props: Props) {
     const { match } = props;
     const { params } = match;
     const dispatch = useDispatch();
@@ -35,11 +35,6 @@ export default function UserDetails(props: Props) {
         error: errorStatistic,
     } = useSelector((state: RootState) => state.statistic);
     const [activeTab, setActiveTab] = useState(0);
-
-    useEffect(() => {
-        console.log(item);
-        console.log(establishmentData);
-    }, [item, establishmentData]);
 
     useEffect(() => {
         dispatch(getOne(params.id));

@@ -15,6 +15,7 @@ import {
 import ConfirmDialog from '../../molecules/ConfirmDialog';
 import ProductsForm from '../Products/Form';
 import Drawer from '../../molecules/Drawer';
+import { Link } from 'react-router-dom';
 
 /**
  * Avatar, nome e email do admin
@@ -113,7 +114,9 @@ export default function TabProducts(props: Props) {
                 <tr className="align-middle" key={item.id}>
                     <td>{i + 1}</td>
                     <td>
-                        <ProductId product={item} />
+                        <Link to={`/produtos/${item.id}`}>
+                            <ProductId product={item} />
+                        </Link>
                     </td>
                     <td className="text-right">
                         <ButtonGroup size="sm">

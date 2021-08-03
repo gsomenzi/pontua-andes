@@ -8,6 +8,7 @@ import establishment from './slices/establishment';
 import establishmentAdmin from './slices/establishmentAdmin';
 import establishmentImage from './slices/establishmentImage';
 import product from './slices/product';
+import productImage from './slices/productImage';
 import role from './slices/role';
 import sale from './slices/sale';
 import statistic from './slices/statistic';
@@ -26,6 +27,7 @@ const store = configureStore({
         establishmentAdmin,
         establishmentImage,
         product,
+        productImage,
         role,
         sale,
         statistic,

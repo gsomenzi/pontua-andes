@@ -13,6 +13,8 @@ import Admins from './views/Admins';
 // ESTABELECIMENTOS
 import Establishments from './views/Establishments/List';
 import EstablishmentDetails from './views/Establishments/Details';
+// PRODUTOS
+import ProductDetails from './views/Products/Details';
 // USUARIOS
 import Users from './views/Users/List';
 import UserDetails from './views/Users/Details';
@@ -43,6 +45,7 @@ export default function Router() {
                             <Route exact path="/categorias" component={Categories} />
                             <Route exact path="/estabelecimentos" component={Establishments} />
                             <Route path="/estabelecimentos/:id" component={EstablishmentDetails} />
+                            <Route path="/produtos/:id" component={ProductDetails} />
                             <Route exact path="/admins" component={Admins} />
                             <Route exact path="/usuarios" component={Users} />
                             <Route path="/usuarios/:id" component={UserDetails} />

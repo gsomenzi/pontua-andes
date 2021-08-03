@@ -16,6 +16,7 @@ const UPDATE_FIELDS = ['nome', 'descricao', 'tipo_pontuacao', 'pontos', 'quantid
 
 type ProductState = {
     items: any[];
+    item: any;
     error: any;
     creating: boolean;
     updating: boolean;
@@ -31,6 +32,7 @@ type ProductState = {
 
 const initialState: ProductState = {
     items: [],
+    item: null,
     error: null,
     creating: false,
     updating: false,
@@ -56,6 +58,15 @@ export const getAllByEstablishment = createAsyncThunk(
         }
     }
 );
+
+export const getOne = createAsyncThunk('product/getOne', async (id: number | string, thunkAPI: any) => {
+    try {
+        const { data } = await ProductService.getOne(id);
+        return data;
+    } catch (e) {
+        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+    }
+});
 
 export const create = createAsyncThunk('product/create', async (payload: any, thunkAPI: any) => {
     try {
@@ -100,6 +111,12 @@ export const slice = createSlice({
         setOrder: (state, action) => {
             state.order = action.payload;
         },
+        setItemProfile: (state, action) => {
+            state.item.perfil = action.payload;
+        },
+        setItemCover: (state, action) => {
+            state.item.capa = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -119,6 +136,22 @@ export const slice = createSlice({
                 };
             })
             .addCase(getAllByEstablishment.rejected, (state, action: PayloadAction<any>) => {
+                state.getting = false;
+                state.error = action.payload.error;
+            })
+            // GETONE
+            .addCase(getOne.pending, (state) => {
+                state.item = null;
+                state.getting = true;
+                state.error = null;
+            })
+            .addCase(getOne.fulfilled, (state, action: PayloadAction<any>) => {
+                state.getting = false;
+                console.log(action.payload.data);
+                const { data } = action.payload;
+                state.item = data;
+            })
+            .addCase(getOne.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
                 state.error = action.payload.error;
             })
@@ -166,6 +199,6 @@ export const slice = createSlice({
     },
 });
 
-export const { setPage, setQty, setOrder } = slice.actions;
+export const { setPage, setQty, setOrder, setItemCover, setItemProfile } = slice.actions;
 
 export default slice.reducer;
