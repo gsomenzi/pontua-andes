@@ -70,3 +70,25 @@ tr.align-middle td,
 tr.align-middle th {
     vertical-align: middle !important;
 }
+
+.tab-images-slot-label {
+    position: absolute;
+    top: 1rem;
+    right: 0rem;
+}
+
+.tab-images-profile-label {
+    padding: 0.25rem 0.5rem;
+    background-color: var(--primary);
+    color: #ffffff;
+    border-radius: 4px 0 0 4px;
+    margin-bottom: 4px;
+}
+
+.tab-images-cover-label {
+    padding: 0.25rem 0.5rem;
+    background-color: var(--secondary);
+    color: #ffffff;
+    border-radius: 4px 0 0 4px;
+    margin-bottom: 4px;
+}

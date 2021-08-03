@@ -37,6 +37,7 @@ const VALUES_TRANSLATION: any = {
     created_at: (value: any) => moment(value).format('DD/MM/YYYY'),
     categoria: (value: any) => (value ? value.nome : '-'),
     status: (value: any) => value.charAt(0).toUpperCase() + value.slice(1),
+    regras: (value: any) => value.replace(/<[^>]*>?/gm, ''),
 };
 
 export function TabInfos(props: Props) {

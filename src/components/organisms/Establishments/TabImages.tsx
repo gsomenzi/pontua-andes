@@ -8,6 +8,14 @@ import ConfirmDialog from '../../molecules/ConfirmDialog';
 import Dropzone from '../../molecules/Dropzone';
 import EstablishmentImagesPreview from '../../molecules/EstablishmentImagesPreview';
 
+function ProfileLabel() {
+    return <div className="tab-images-profile-label">Perfil</div>;
+}
+
+function CoverLabel() {
+    return <div className="tab-images-cover-label">Capa</div>;
+}
+
 type TabImageProps = {
     establishment: any;
 };
@@ -61,8 +69,12 @@ export default function TabImages(props: TabImageProps) {
             const isUpdating = selected && selected.id === item.id && updating;
             const isRemoving = selected && selected.id === item.id && removing;
             return (
-                <div className="col-6 col-md-3 col-lg-2" key={i}>
-                    <Card style={{ marginBottom: '1rem' }}>
+                <div className="col-6 col-md-3 col-lg-3" key={i}>
+                    <Card style={{ position: 'relative', marginBottom: '1rem' }}>
+                        <div className="tab-images-slot-label">
+                            {item.perfil ? <ProfileLabel /> : null}
+                            {item.capa ? <CoverLabel /> : null}
+                        </div>
                         <CardImg src={item.quadrado} />
                         <CardBody>
                             <div className="d-flex align-items-center">
@@ -115,12 +127,18 @@ export default function TabImages(props: TabImageProps) {
                     );
                 }}
             />
-            <div className="row align-items-center">
-                <div className="col-12">
+            <div className="row">
+                <div className="col-lg-9 col-12">
+                    <h4>Galeria de imagens</h4>
+                    <hr className="mt-0" />
+                    <div className="row align-items-start">{renderItems()}</div>
+                </div>
+                <div className="col-12 col-lg-3" style={{ borderLeft: '1px solid #00000022' }}>
+                    <h4>Preview</h4>
+                    <hr className="mt-0" />
                     <EstablishmentImagesPreview establishment={establishment} />
                 </div>
             </div>
-            <div className="row align-items-start">{renderItems()}</div>
             <ConfirmDialog
                 title="Remover o item?"
                 text="Você tem certeza que deseja remover este item?"
