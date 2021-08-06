@@ -9,9 +9,11 @@ import Drawer from '../../components/molecules/Drawer';
 import PageHeader from '../../components/molecules/PageHeader';
 import { RootState } from '../../store';
 import { getOne, update } from '../../store/slices/product';
+import { getByProduct } from '../../store/slices/statistic';
 import ProductsForm from '../../components/organisms/Products/Form';
 import { TabInfos } from '../../components/organisms/Products/TabInfos';
 import TabImages from '../../components/organisms/Products/TabImages';
+import { TabDashboard } from '../../components/organisms/Products/TabDashboard';
 
 type Props = {
     match: any;
@@ -32,10 +34,16 @@ export default function ProductDetails(props: Props) {
     const { getting, updating, item, error } = useSelector((state: RootState) => state.product);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
+    const {
+        loading: loadingStatistics,
+        productData,
+        error: errorStatistic,
+    } = useSelector((state: RootState) => state.statistic);
 
     useEffect(() => {
         if (params.id) {
             dispatch(getOne(params.id));
+            dispatch(getByProduct(params.id));
         }
     }, [dispatch, params]);
 
@@ -90,7 +98,9 @@ export default function ProductDetails(props: Props) {
                     <div className="mt-2">
                         {item ? (
                             <TabContent activeTab={activeTab}>
-                                <TabPane tabId={0}></TabPane>
+                                <TabPane tabId={0}>
+                                    <TabDashboard data={productData} />
+                                </TabPane>
                                 <TabPane tabId={1}>
                                     <TabInfos product={item} />
                                 </TabPane>

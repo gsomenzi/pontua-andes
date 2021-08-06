@@ -39,8 +39,10 @@ export function TabInfos(props: Props) {
                 return (
                     <tr key={key}>
                         <td className="compact">
-                            {`${HEADERS_TRANSLATION[key] || key}`.charAt(0).toUpperCase() +
-                                `${HEADERS_TRANSLATION[key] || key}`.slice(1)}
+                            <span className="text-bold">
+                                {`${HEADERS_TRANSLATION[key] || key}`.charAt(0).toUpperCase() +
+                                    `${HEADERS_TRANSLATION[key] || key}`.slice(1)}
+                            </span>
                         </td>
                         <td>{VALUES_TRANSLATION[key] ? VALUES_TRANSLATION[key](product[key]) : product[key]}</td>
                     </tr>

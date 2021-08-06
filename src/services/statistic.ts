@@ -11,4 +11,8 @@ export default class StatisticService {
         const res = await httpClient.get(`/admin/estatisticas/${id}`);
         return res;
     }
+    static async getByProduct(id: number | string): Promise<AxiosResponse<any>> {
+        const res = await httpClient.get(`/admin/estatisticas-produtos/${id}`);
+        return res;
+    }
 }
