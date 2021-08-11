@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
-// import HistoryChart from './HistoryChart';
+import HistoryChart from './HistoryChart';
 // import UserPerSexChart from './UserPerSexChart';
 // import UserPerAgeChart from './UserPerAgeChart';
 // import MostScoresUsersTable from './MostScoresUsersTable';
@@ -20,7 +20,9 @@ export function TabDashboard(props: Props) {
                 <CardHeader>
                     <CardTitle>Histórico</CardTitle>
                 </CardHeader>
-                <CardBody>{/* <HistoryChart data={data} /> */}</CardBody>
+                <CardBody>
+                    <HistoryChart data={data} />
+                </CardBody>
             </Card>
             {/* USUARIOS POR SEXO E FAIXA ETARIA */}
             <div className="row">

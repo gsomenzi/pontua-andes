@@ -2,7 +2,7 @@ interface ProductStatisticData {
     cidades: any[];
     dias: any[];
     historico: {
-        data: string;
+        dia: string;
         quantidade: number;
     }[];
     produto: any;

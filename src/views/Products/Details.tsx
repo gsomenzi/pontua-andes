@@ -19,14 +19,6 @@ type Props = {
     match: any;
 };
 
-/**
- * Breadcrumbs no topo da página
- */
-const breadCrumbItems = [
-    { title: 'Estabelecimentos', link: '/estabelecimentos' },
-    { title: 'Produto', link: '/a' },
-];
-
 export default function ProductDetails(props: Props) {
     const { match } = props;
     const { params } = match;
@@ -34,6 +26,12 @@ export default function ProductDetails(props: Props) {
     const { getting, updating, item, error } = useSelector((state: RootState) => state.product);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [activeTab, setActiveTab] = useState(0);
+    /**
+     * Breadcrumbs no topo da página
+     */
+    const [breadCrumbItems, setBreadCrumbItems] = useState<any>([
+        { title: 'Estabelecimentos', link: '/estabelecimentos' },
+    ]);
     const {
         loading: loadingStatistics,
         productData,
@@ -44,8 +42,13 @@ export default function ProductDetails(props: Props) {
         if (params.id) {
             dispatch(getOne(params.id));
             dispatch(getByProduct(params.id));
+            setBreadCrumbItems([...breadCrumbItems].concat([{ title: params.id }]));
         }
     }, [dispatch, params]);
+
+    useEffect(() => {
+        console.log('productData', productData);
+    }, [productData]);
 
     /**
      * Abre o drawer para edição
