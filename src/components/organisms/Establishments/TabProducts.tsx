@@ -120,8 +120,14 @@ export default function TabProducts(props: Props) {
                     </td>
                     <td className="text-right">
                         <ButtonGroup size="sm">
-                            <Button onClick={(ev) => openEdit(item)} size="sm" color="primary">
-                                {updating && selected && selected.id === item.id ? <Spinner size="sm" /> : 'Editar'}
+                            <Button
+                                tag={Link}
+                                to={`/produtos/${item.id}`}
+                                onClick={(ev) => openEdit(item)}
+                                size="sm"
+                                color="primary"
+                            >
+                                Detalhes
                             </Button>
                             <ButtonDropdown
                                 isOpen={openActionDropdown === item.id}
@@ -131,6 +137,7 @@ export default function TabProducts(props: Props) {
                                     {removing && selected && selected.id === item.id ? <Spinner size="sm" /> : 'Mais'}
                                 </DropdownToggle>
                                 <DropdownMenu>
+                                    <DropdownItem onClick={(ev) => openEdit(item)}>Editar</DropdownItem>
                                     <DropdownItem onClick={(ev) => handleRemove(ev, item)}>Remover</DropdownItem>
                                 </DropdownMenu>
                             </ButtonDropdown>
