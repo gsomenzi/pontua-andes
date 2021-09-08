@@ -15,6 +15,8 @@ import Establishments from './views/Establishments/List';
 import EstablishmentDetails from './views/Establishments/Details';
 // PRODUTOS
 import ProductDetails from './views/Products/Details';
+// PROMOÇÕES
+import SaleDetails from './views/Sales/Details';
 // USUARIOS
 import Users from './views/Users/List';
 import UserDetails from './views/Users/Details';
@@ -46,6 +48,7 @@ export default function Router() {
                             <Route exact path="/estabelecimentos" component={Establishments} />
                             <Route path="/estabelecimentos/:id" component={EstablishmentDetails} />
                             <Route path="/produtos/:id" component={ProductDetails} />
+                            <Route path="/promocoes/:id" component={SaleDetails} />
                             <Route exact path="/admins" component={Admins} />
                             <Route exact path="/usuarios" component={Users} />
                             <Route path="/usuarios/:id" component={UserDetails} />

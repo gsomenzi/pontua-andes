@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllByEstablishment, create, update, remove } from '../../../store/slices/sale';
 import { RootState } from '../../../store';
@@ -116,8 +117,14 @@ export default function TabSales(props: Props) {
                     </td>
                     <td className="text-right">
                         <ButtonGroup size="sm">
-                            <Button onClick={(ev) => openEdit(item)} size="sm" color="primary">
-                                {updating && selected && selected.id === item.id ? <Spinner size="sm" /> : 'Editar'}
+                            <Button
+                                tag={Link}
+                                to={`/promocoes/${item.id}`}
+                                onClick={(ev) => openEdit(item)}
+                                size="sm"
+                                color="primary"
+                            >
+                                Detalhes
                             </Button>
                             <ButtonDropdown
                                 isOpen={openActionDropdown === item.id}
@@ -127,6 +134,7 @@ export default function TabSales(props: Props) {
                                     {removing && selected && selected.id === item.id ? <Spinner size="sm" /> : 'Mais'}
                                 </DropdownToggle>
                                 <DropdownMenu>
+                                    <DropdownItem onClick={(ev) => openEdit(item)}>Editar</DropdownItem>
                                     <DropdownItem onClick={(ev) => handleRemove(ev, item)}>Remover</DropdownItem>
                                 </DropdownMenu>
                             </ButtonDropdown>

@@ -38,6 +38,11 @@ export default class SaleService {
         const res = await httpClient.get(url);
         return res;
     }
+    static async getOne(id: number | string): Promise<any> {
+        const url = `/admin/promocoes/${id}`;
+        const res = await httpClient.get(url);
+        return res;
+    }
     static async create(payload: SaleCreatePayload): Promise<any> {
         const url = '/admin/promocoes';
         const res = await httpClient.post(url, payload);

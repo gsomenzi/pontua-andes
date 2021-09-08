@@ -11,6 +11,7 @@ import product from './slices/product';
 import productImage from './slices/productImage';
 import role from './slices/role';
 import sale from './slices/sale';
+import saleImage from './slices/saleImage';
 import statistic from './slices/statistic';
 import user from './slices/user';
 
@@ -30,6 +31,7 @@ const store = configureStore({
         productImage,
         role,
         sale,
+        saleImage,
         statistic,
         user,
     },
