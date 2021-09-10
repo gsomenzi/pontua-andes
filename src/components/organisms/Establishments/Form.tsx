@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAll as getCategories } from '../../../store/slices/category';
 import { RootState } from '../../../store';
 import ErrorDialog from '../../molecules/ErrorDialog';
+import CepService from '../../../services/cep';
 
 type Props = {
     /**
@@ -116,6 +117,17 @@ export default function Form(props: Props) {
         enableReinitialize: true,
     });
     const { values, handleChange, handleBlur, handleSubmit, setFieldValue, errors: formErrors, touched } = formik;
+    //
+    async function handleCepChange(e: any) {
+        setFieldValue('cep', e.target.value);
+        const cepData = await CepService.getDataByCep(e.target.value);
+        if (cepData) {
+            setFieldValue('bairro', cepData.bairro);
+            setFieldValue('cidade', cepData.localidade);
+            setFieldValue('logradouro', cepData.logradouro);
+            setFieldValue('estado', cepData.uf);
+        }
+    }
     // ATUALIZA CAMPOS AO EDITAR
     useEffect(() => {
         if (establishment) {
@@ -308,7 +320,7 @@ export default function Form(props: Props) {
                         <ZipcodeField
                             value={values.cep}
                             onBlur={handleBlur('cep')}
-                            onChange={handleChange('cep')}
+                            onChange={(e: any) => handleCepChange(e)}
                             invalid={!!(formErrors.cep && touched.cep)}
                         />
                         <FormFeedback>{formErrors.cep}</FormFeedback>
