@@ -115,6 +115,7 @@ export default function Categories() {
                     <tr key={i} className="align-middle">
                         <td className="compact">{i + 1}</td>
                         <td>{item.nome}</td>
+                        <td className="compact">{item.estabelecimentos_count}</td>
                         <td className="compact">
                             <ButtonGroup size="sm">
                                 <Button onClick={(ev) => openEdit(item)} size="sm" color="primary">
@@ -162,6 +163,7 @@ export default function Categories() {
                     <tr>
                         <th className="compact">#</th>
                         <th>Nome</th>
+                        <th>Estabelecimentos</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
