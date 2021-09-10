@@ -16,7 +16,7 @@ import Drawer from '../components/molecules/Drawer';
 import PageHeader from '../components/molecules/PageHeader';
 import AdminsForm from '../components/organisms/Admins/Form';
 import { RootState } from '../store';
-import { getAll, search, create, update, remove, setPage } from '../store/slices/admin';
+import { getAll, search, create, update, remove, setPage, clearErrors } from '../store/slices/admin';
 import ConfirmDialog from '../components/molecules/ConfirmDialog';
 import Pagination from '../components/organisms/Layout/Pagination';
 
@@ -37,6 +37,10 @@ export default function Admins() {
     const { creating, getting, updating, removing, items, error, pagination } = useSelector(
         (state: RootState) => state.admin
     );
+
+    useEffect(() => {
+        setOpenDrawer(false);
+    }, [items]);
 
     /**
      * Busca todos os admins ao montar a página
@@ -65,6 +69,7 @@ export default function Admins() {
      * Desmarca item selecionado e abre o drawer
      */
     async function openAdd() {
+        dispatch(clearErrors());
         await setSelected({ id: 0 });
         setOpenDrawer(true);
     }
@@ -74,6 +79,7 @@ export default function Admins() {
      * @param item Admin a ser selecionado
      */
     async function openEdit(item: any) {
+        dispatch(clearErrors());
         await setSelected(item);
         setOpenDrawer(true);
     }
@@ -90,7 +96,6 @@ export default function Admins() {
     }
 
     function submit(values: any) {
-        console.log(values);
         if (selected && selected.id) {
             dispatch(update({ ...values, id: selected.id }));
         } else {

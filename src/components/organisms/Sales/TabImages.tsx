@@ -33,6 +33,9 @@ export default function TabImages(props: TabImageProps) {
             dispatch(getAllBySale(sale.id));
         }
     }, [sale]);
+    useEffect(() => {
+        console.log('IMAGENS DA PROMOCAO', items);
+    }, [items]);
     /**
      * Seleciona uma imagem e abre modal para confirmar a remoção
      * @param e Evento do link a ser cancelado

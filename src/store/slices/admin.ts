@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import AdminService from '../../services/admin';
+import AppErrorHandler from '../../plugins/AppErrorHandler';
 import { parseTrustedFields } from '../../tools';
 
 const CREATE_FIELDS = ['nome', 'email', 'senha', 'funcoes_id'];
@@ -41,7 +42,7 @@ export const getAll = createAsyncThunk('admin/getAll', async (payload: undefined
         const { data } = await AdminService.getAll(pagination.page, pagination.qty, order);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -51,7 +52,7 @@ export const search = createAsyncThunk('admin/search', async (term: string, thun
         const { data } = await AdminService.search(term, pagination.page, pagination.qty, order);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -61,7 +62,7 @@ export const create = createAsyncThunk('admin/create', async (payload: any, thun
         const { data } = await AdminService.create(createPayload);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -72,7 +73,7 @@ export const update = createAsyncThunk('admin/update', async (payload: any, thun
         const { data } = await AdminService.update(id, updatePayload);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -81,7 +82,7 @@ export const remove = createAsyncThunk('admin/remove', async (id: string | numbe
         const res = await AdminService.remove(id);
         return id;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -97,6 +98,9 @@ export const slice = createSlice({
         },
         setOrder: (state, action) => {
             state.order = action.payload;
+        },
+        clearErrors: (state) => {
+            state.error = null;
         },
     },
     extraReducers: (builder) => {
@@ -118,7 +122,7 @@ export const slice = createSlice({
             })
             .addCase(getAll.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // SEARCH
             .addCase(search.pending, (state) => {
@@ -131,7 +135,7 @@ export const slice = createSlice({
             })
             .addCase(search.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // CREATE
             .addCase(create.pending, (state) => {
@@ -144,7 +148,7 @@ export const slice = createSlice({
             })
             .addCase(create.rejected, (state, action: PayloadAction<any>) => {
                 state.creating = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // UPDATE
             .addCase(update.pending, (state) => {
@@ -159,7 +163,7 @@ export const slice = createSlice({
             })
             .addCase(update.rejected, (state, action: PayloadAction<any>) => {
                 state.updating = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // REMOVE
             .addCase(remove.pending, (state) => {
@@ -172,11 +176,11 @@ export const slice = createSlice({
             })
             .addCase(remove.rejected, (state, action: PayloadAction<any>) => {
                 state.removing = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             });
     },
 });
 
-export const { setPage, setQty, setOrder } = slice.actions;
+export const { setPage, setQty, setOrder, clearErrors } = slice.actions;
 
 export default slice.reducer;

@@ -54,7 +54,7 @@ export default function SaleDetails(props: Props) {
             <BreadCrumbs items={breadCrumbItems} />
             <PageHeader
                 searchable={false}
-                title="Detalhes do prêmio"
+                title="Detalhes da promoção"
                 loading={getting}
                 actions={[
                     <Button onClick={() => setOpenDrawer(true)} color="primary" key="edit">

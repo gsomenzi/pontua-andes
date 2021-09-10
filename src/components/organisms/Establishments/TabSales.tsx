@@ -113,7 +113,9 @@ export default function TabSales(props: Props) {
                 <tr className="align-middle" key={item.id}>
                     <td>{i + 1}</td>
                     <td>
-                        <SaleId sale={item} />
+                        <Link to={`/promocoes/${item.id}`}>
+                            <SaleId sale={item} />
+                        </Link>
                     </td>
                     <td className="text-right">
                         <ButtonGroup size="sm">

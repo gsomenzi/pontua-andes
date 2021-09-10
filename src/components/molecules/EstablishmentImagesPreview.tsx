@@ -21,7 +21,6 @@ function Avatar(props: any) {
 }
 function Background(props: any) {
     const { establishment } = props;
-    console.log(establishment.perfil ? establishment.perfil : null);
     return (
         <div className="establishment-image-preview-cover">
             {establishment.perfil ? <img src={establishment.perfil.thumb} /> : null}
