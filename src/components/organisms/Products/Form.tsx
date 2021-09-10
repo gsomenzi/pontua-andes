@@ -2,6 +2,9 @@ import React, { useEffect } from 'react';
 import { Form as BootstrapForm, FormGroup, Label, Input, FormFeedback, Button, Spinner, CustomInput } from 'reactstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import ErrorDialog from '../../molecules/ErrorDialog';
 
 type Props = {
     /**
@@ -52,6 +55,7 @@ const schema = Yup.object().shape({
  */
 export default function Form(props: Props) {
     const { loading, product, onSubmit } = props;
+    const { error } = useSelector((state: RootState) => state.product);
 
     // FORMIK
     const formik = useFormik({
@@ -181,6 +185,8 @@ export default function Form(props: Props) {
                 />
                 <FormFeedback>{formErrors.regras}</FormFeedback>
             </FormGroup>
+            {/* ERROR */}
+            <ErrorDialog error={error} />
             {/* SUBMIT */}
             <Button type="submit" disabled={loading} block>
                 {loading ? <Spinner size="sm" /> : 'Salvar'}

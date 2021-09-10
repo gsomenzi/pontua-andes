@@ -6,6 +6,9 @@ import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/light.css';
 import moment from 'moment';
 import classNames from 'classnames';
+import ErrorDialog from '../../molecules/ErrorDialog';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 
 type Props = {
     /**
@@ -44,6 +47,7 @@ const DATE_FORMAT = 'DD/MM/YYYY';
  */
 export default function Form(props: Props) {
     const { loading, sale, onSubmit } = props;
+    const { error } = useSelector((state: RootState) => state.sale);
 
     // FORMIK
     const formik = useFormik({
@@ -160,6 +164,8 @@ export default function Form(props: Props) {
                     onChange={(ev) => setFieldValue('ativo', ev.target.checked)}
                 />
             </FormGroup>
+            {/* ERROR */}
+            <ErrorDialog error={error} />
             {/* SUBMIT */}
             <Button type="submit" disabled={loading} block>
                 {loading ? <Spinner size="sm" /> : 'Salvar'}

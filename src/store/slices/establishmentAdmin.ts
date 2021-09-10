@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import AdminService from '../../services/establishmentAdmin';
 import { parseTrustedFields } from '../../tools';
+import AppErrorHandler from '../../plugins/AppErrorHandler';
 
 const CREATE_FIELDS = ['nome', 'email', 'senha', 'estabelecimentos_id', 'funcoes_estabelecimentos_id'];
 const UPDATE_FIELDS = ['nome', 'email', 'senha', 'estabelecimentos_id', 'funcoes_estabelecimentos_id'];
@@ -43,7 +44,7 @@ export const getAllByEstablishment = createAsyncThunk(
             const { data } = await AdminService.getAllByEstablishment(id, pagination.page, pagination.qty, order);
             return data;
         } catch (e) {
-            return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+            return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
         }
     }
 );
@@ -54,7 +55,7 @@ export const create = createAsyncThunk('establishmentAdmin/create', async (paylo
         const { data } = await AdminService.create(createPayload);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -65,7 +66,7 @@ export const update = createAsyncThunk('establishmentAdmin/update', async (paylo
         const { data } = await AdminService.update(id, updatePayload);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -74,7 +75,7 @@ export const remove = createAsyncThunk('establishmentAdmin/remove', async (id: s
         const res = await AdminService.remove(id);
         return id;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -90,6 +91,9 @@ export const slice = createSlice({
         },
         setOrder: (state, action) => {
             state.order = action.payload;
+        },
+        clearErrors: (state) => {
+            state.error = null;
         },
     },
     extraReducers: (builder) => {
@@ -111,7 +115,7 @@ export const slice = createSlice({
             })
             .addCase(getAllByEstablishment.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // CREATE
             .addCase(create.pending, (state) => {
@@ -124,7 +128,7 @@ export const slice = createSlice({
             })
             .addCase(create.rejected, (state, action: PayloadAction<any>) => {
                 state.creating = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // UPDATE
             .addCase(update.pending, (state) => {
@@ -139,7 +143,7 @@ export const slice = createSlice({
             })
             .addCase(update.rejected, (state, action: PayloadAction<any>) => {
                 state.updating = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // REMOVE
             .addCase(remove.pending, (state) => {
@@ -152,11 +156,11 @@ export const slice = createSlice({
             })
             .addCase(remove.rejected, (state, action: PayloadAction<any>) => {
                 state.removing = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             });
     },
 });
 
-export const { setPage, setQty, setOrder } = slice.actions;
+export const { setPage, setQty, setOrder, clearErrors } = slice.actions;
 
 export default slice.reducer;

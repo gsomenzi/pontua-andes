@@ -16,7 +16,7 @@ import Drawer from '../components/molecules/Drawer';
 import PageHeader from '../components/molecules/PageHeader';
 import CategoriesForm from '../components/organisms/Categories/Form';
 import { RootState } from '../store';
-import { getAll, search, create, update, remove, setPage } from '../store/slices/category';
+import { getAll, search, create, update, remove, setPage, clearErrors } from '../store/slices/category';
 import ConfirmDialog from '../components/molecules/ConfirmDialog';
 import Pagination from '../components/organisms/Layout/Pagination';
 
@@ -71,6 +71,7 @@ export default function Categories() {
      * Desmarca item selecionado e abre o drawer
      */
     async function openAdd() {
+        dispatch(clearErrors());
         await setSelected({ id: 0 });
         setOpenDrawer(true);
     }
@@ -80,6 +81,7 @@ export default function Categories() {
      * @param item Categoria a ser selecionada
      */
     async function openEdit(item: any) {
+        dispatch(clearErrors());
         await setSelected(item);
         setOpenDrawer(true);
     }

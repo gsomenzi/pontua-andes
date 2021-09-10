@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import SaleService from '../../services/sale';
 import { parseTrustedFields } from '../../tools';
+import AppErrorHandler from '../../plugins/AppErrorHandler';
 
 const CREATE_FIELDS = ['nome', 'descricao', 'inicio_validade', 'final_validade', 'ativo', 'estabelecimentos_id'];
 const UPDATE_FIELDS = ['nome', 'descricao', 'inicio_validade', 'final_validade', 'estabelecimentos_id'];
@@ -45,7 +46,7 @@ export const getAllByEstablishment = createAsyncThunk(
             const { data } = await SaleService.getAllByEstablishment(id, pagination.page, pagination.qty, order);
             return data;
         } catch (e) {
-            return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+            return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
         }
     }
 );
@@ -55,7 +56,7 @@ export const getOne = createAsyncThunk('sale/getOne', async (id: number | string
         const { data } = await SaleService.getOne(id);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -65,7 +66,7 @@ export const create = createAsyncThunk('sale/create', async (payload: any, thunk
         const { data } = await SaleService.create(createPayload);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -76,7 +77,7 @@ export const update = createAsyncThunk('sale/update', async (payload: any, thunk
         const { data } = await SaleService.update(id, updatePayload);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -85,7 +86,7 @@ export const remove = createAsyncThunk('sale/remove', async (id: string | number
         const res = await SaleService.remove(id);
         return id;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -107,6 +108,9 @@ export const slice = createSlice({
         },
         setItemCover: (state, action) => {
             state.item.capa = action.payload;
+        },
+        clearErrors: (state) => {
+            state.error = null;
         },
     },
     extraReducers: (builder) => {
@@ -190,6 +194,6 @@ export const slice = createSlice({
     },
 });
 
-export const { setPage, setQty, setOrder, setItemProfile, setItemCover } = slice.actions;
+export const { setPage, setQty, setOrder, setItemProfile, setItemCover, clearErrors } = slice.actions;
 
 export default slice.reducer;

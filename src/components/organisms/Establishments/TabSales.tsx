@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllByEstablishment, create, update, remove } from '../../../store/slices/sale';
+import { getAllByEstablishment, create, update, remove, clearErrors } from '../../../store/slices/sale';
 import { RootState } from '../../../store';
 import {
     Button,
@@ -51,6 +51,12 @@ export default function TabSales(props: Props) {
     const { establishment } = props;
     const { creating, getting, updating, removing, error, items } = useSelector((state: RootState) => state.sale);
     /**
+     * Fecha o drawer sempre que recebe os itens da tabela
+     */
+    useEffect(() => {
+        setOpenDrawer(false);
+    }, [items]);
+    /**
      * Busca todas as promoções do estabelecimento
      */
     useEffect(() => {
@@ -69,6 +75,7 @@ export default function TabSales(props: Props) {
      * Desmarca item selecionado e abre o drawer
      */
     async function openAdd() {
+        dispatch(clearErrors());
         await setSelected({ id: 0 });
         setOpenDrawer(true);
     }
@@ -77,6 +84,7 @@ export default function TabSales(props: Props) {
      * @param item Estabelecimento a ser selecionado
      */
     async function openEdit(item: any) {
+        dispatch(clearErrors());
         await setSelected(item);
         setOpenDrawer(true);
     }

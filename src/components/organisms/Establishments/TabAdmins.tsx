@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllByEstablishment, create, update, remove } from '../../../store/slices/establishmentAdmin';
+import { getAllByEstablishment, create, update, remove, clearErrors } from '../../../store/slices/establishmentAdmin';
 import { RootState } from '../../../store';
 import {
     Button,
@@ -53,6 +53,12 @@ export default function TabAdmins(props: Props) {
         (state: RootState) => state.establishmentAdmin
     );
     /**
+     * Fecha o drawer sempre que recebe os itens da tabela
+     */
+    useEffect(() => {
+        setOpenDrawer(false);
+    }, [items]);
+    /**
      * Busca todos os admins do estabelecimento
      */
     useEffect(() => {
@@ -71,6 +77,7 @@ export default function TabAdmins(props: Props) {
      * Desmarca item selecionado e abre o drawer
      */
     async function openAdd() {
+        dispatch(clearErrors());
         await setSelected({ id: 0 });
         setOpenDrawer(true);
     }
@@ -79,6 +86,7 @@ export default function TabAdmins(props: Props) {
      * @param item Estabelecimento a ser selecionado
      */
     async function openEdit(item: any) {
+        dispatch(clearErrors());
         await setSelected(item);
         setOpenDrawer(true);
     }

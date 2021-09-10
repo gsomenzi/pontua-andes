@@ -11,6 +11,7 @@ import VerticalSteps from '../../molecules/VerticalSteps';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAll as getCategories } from '../../../store/slices/category';
 import { RootState } from '../../../store';
+import ErrorDialog from '../../molecules/ErrorDialog';
 
 type Props = {
     /**
@@ -78,6 +79,7 @@ export default function Form(props: Props) {
     const dispatch = useDispatch();
     const [activeStep, setActiveStep] = useState(0);
     const { getting, items: categories } = useSelector((state: RootState) => state.category);
+    const { error } = useSelector((state: RootState) => state.establishment);
 
     useEffect(() => {
         dispatch(getCategories());
@@ -433,6 +435,8 @@ export default function Form(props: Props) {
                         </Input>
                         <FormFeedback>{formErrors.status}</FormFeedback>
                     </FormGroup>
+                    {/* ERROR */}
+                    <ErrorDialog error={error} />
                     <div className="text-right">
                         <ButtonGroup>
                             <Button color="default" onClick={() => setActiveStep(2)}>

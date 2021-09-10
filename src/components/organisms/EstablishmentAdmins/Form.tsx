@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAll as getRoles } from '../../../store/slices/role';
 import { RootState } from '../../../store';
+import ErrorDialog from '../../molecules/ErrorDialog';
 
 type Props = {
     /**
@@ -42,6 +43,7 @@ export default function Form(props: Props) {
     const { loading, admin, onSubmit } = props;
     const [resetPassword, setResetPassword] = useState(false);
     const { getting: gettingRoles, items: roles } = useSelector((state: RootState) => state.role);
+    const { error } = useSelector((state: RootState) => state.establishmentAdmin);
     // BUSCA FUNCOES
     useEffect(() => {
         dispatch(getRoles());
@@ -128,6 +130,8 @@ export default function Form(props: Props) {
                     <FormFeedback>{formErrors.senha}</FormFeedback>
                 </FormGroup>
             ) : null}
+            {/* ERROR */}
+            <ErrorDialog error={error} />
             {/* SUBMIT */}
             <Button type="submit" disabled={loading} block>
                 {loading ? <Spinner size="sm" /> : 'Salvar'}

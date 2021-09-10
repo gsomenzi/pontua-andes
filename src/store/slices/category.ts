@@ -99,6 +99,9 @@ export const slice = createSlice({
         setOrder: (state, action) => {
             state.order = action.payload;
         },
+        clearErrors: (state) => {
+            state.error = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -178,6 +181,6 @@ export const slice = createSlice({
     },
 });
 
-export const { setPage, setQty, setOrder } = slice.actions;
+export const { setPage, setQty, setOrder, clearErrors } = slice.actions;
 
 export default slice.reducer;

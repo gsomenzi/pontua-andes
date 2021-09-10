@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllByEstablishment, create, update, remove } from '../../../store/slices/product';
+import { getAllByEstablishment, create, update, remove, clearErrors } from '../../../store/slices/product';
 import { RootState } from '../../../store';
 import {
     Button,
@@ -52,6 +52,12 @@ export default function TabProducts(props: Props) {
     const { establishment } = props;
     const { creating, getting, updating, removing, error, items } = useSelector((state: RootState) => state.product);
     /**
+     * Fecha o drawer sempre que recebe os itens da tabela
+     */
+    useEffect(() => {
+        setOpenDrawer(false);
+    }, [items]);
+    /**
      * Busca todos os admins do estabelecimento
      */
     useEffect(() => {
@@ -70,6 +76,7 @@ export default function TabProducts(props: Props) {
      * Desmarca item selecionado e abre o drawer
      */
     async function openAdd() {
+        dispatch(clearErrors());
         await setSelected({ id: 0 });
         setOpenDrawer(true);
     }
@@ -78,6 +85,7 @@ export default function TabProducts(props: Props) {
      * @param item Estabelecimento a ser selecionado
      */
     async function openEdit(item: any) {
+        dispatch(clearErrors());
         await setSelected(item);
         setOpenDrawer(true);
     }

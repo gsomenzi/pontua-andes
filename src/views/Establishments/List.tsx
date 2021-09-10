@@ -17,7 +17,16 @@ import Drawer from '../../components/molecules/Drawer';
 import PageHeader from '../../components/molecules/PageHeader';
 import EstablishmentsForm from '../../components/organisms/Establishments/Form';
 import { RootState } from '../../store';
-import { getAll, search, create, update, setPage, setOrder, remove } from '../../store/slices/establishment';
+import {
+    getAll,
+    search,
+    create,
+    update,
+    setPage,
+    setOrder,
+    remove,
+    clearErrors,
+} from '../../store/slices/establishment';
 import ConfirmDialog from '../../components/molecules/ConfirmDialog';
 import Pagination from '../../components/organisms/Layout/Pagination';
 
@@ -71,6 +80,12 @@ export default function Establishments() {
     );
 
     /**
+     * Fecha o drawer sempre que recebe os itens da tabela
+     */
+    useEffect(() => {
+        setOpenDrawer(false);
+    }, [items]);
+    /**
      * Busca todos os estabelecimentos ao montar a página
      */
     useEffect(() => {
@@ -105,6 +120,7 @@ export default function Establishments() {
      * Desmarca item selecionado e abre o drawer
      */
     async function openAdd() {
+        dispatch(clearErrors());
         await setSelected({ id: 0 });
         setOpenDrawer(true);
     }
@@ -114,6 +130,7 @@ export default function Establishments() {
      * @param item Estabelecimento a ser selecionado
      */
     async function openEdit(item: any) {
+        dispatch(clearErrors());
         await setSelected(item);
         setOpenDrawer(true);
     }
