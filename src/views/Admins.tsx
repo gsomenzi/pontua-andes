@@ -38,6 +38,9 @@ export default function Admins() {
         (state: RootState) => state.admin
     );
 
+    /**
+     * Fecha o drawer sempre que recebe os itens da tabela
+     */
     useEffect(() => {
         setOpenDrawer(false);
     }, [items]);

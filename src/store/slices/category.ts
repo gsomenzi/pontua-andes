@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import CategoryService from '../../services/category';
 import { parseTrustedFields } from '../../tools';
+import AppErrorHandler from '../../plugins/AppErrorHandler';
 
 const CREATE_FIELDS = ['nome'];
 const UPDATE_FIELDS = ['nome'];
@@ -41,7 +42,7 @@ export const getAll = createAsyncThunk('category/getAll', async (payload: undefi
         const { data } = await CategoryService.getAll(pagination.page, pagination.qty, order);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -51,7 +52,7 @@ export const search = createAsyncThunk('category/search', async (term: string, t
         const { data } = await CategoryService.search(term, page, qty, order);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -61,7 +62,7 @@ export const create = createAsyncThunk('category/create', async (payload: any, t
         const { data } = await CategoryService.create(createPayload);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -72,7 +73,7 @@ export const update = createAsyncThunk('category/update', async (payload: any, t
         const { data } = await CategoryService.update(id, updatePayload);
         return data;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -81,7 +82,7 @@ export const remove = createAsyncThunk('category/remove', async (id: string | nu
         const res = await CategoryService.remove(id);
         return id;
     } catch (e) {
-        return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
+        return thunkAPI.rejectWithValue(AppErrorHandler.getFormattedError(e));
     }
 });
 
@@ -118,7 +119,7 @@ export const slice = createSlice({
             })
             .addCase(getAll.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // SEARCH
             .addCase(search.pending, (state) => {
@@ -131,7 +132,7 @@ export const slice = createSlice({
             })
             .addCase(search.rejected, (state, action: PayloadAction<any>) => {
                 state.getting = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // CREATE
             .addCase(create.pending, (state) => {
@@ -144,7 +145,7 @@ export const slice = createSlice({
             })
             .addCase(create.rejected, (state, action: PayloadAction<any>) => {
                 state.creating = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // UPDATE
             .addCase(update.pending, (state) => {
@@ -159,7 +160,7 @@ export const slice = createSlice({
             })
             .addCase(update.rejected, (state, action: PayloadAction<any>) => {
                 state.updating = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             })
             // REMOVE
             .addCase(remove.pending, (state) => {
@@ -172,7 +173,7 @@ export const slice = createSlice({
             })
             .addCase(remove.rejected, (state, action: PayloadAction<any>) => {
                 state.removing = false;
-                state.error = action.payload.error;
+                state.error = action.payload;
             });
     },
 });

@@ -39,6 +39,12 @@ export default function Categories() {
     );
 
     /**
+     * Fecha o drawer sempre que recebe os itens da tabela
+     */
+    useEffect(() => {
+        setOpenDrawer(false);
+    }, [items]);
+    /**
      * Busca todas as categorias ao montar a página
      */
     useEffect(() => {
