@@ -25,6 +25,7 @@ type UserState = {
         | 'pontos-desc'
         | 'vezes'
         | 'vezes-desc';
+    filters: any;
 };
 
 const initialState: UserState = {
@@ -39,12 +40,13 @@ const initialState: UserState = {
         last: 1,
     },
     order: 'alfabetica',
+    filters: null,
 };
 
 export const getAll = createAsyncThunk('user/getAll', async (payload: undefined, thunkAPI: any) => {
     try {
-        const { pagination, order } = thunkAPI.getState().user;
-        const { data } = await UserService.getAll(pagination.page, pagination.qty, order);
+        const { pagination, order, filters } = thunkAPI.getState().user;
+        const { data } = await UserService.getAll(pagination.page, pagination.qty, order, filters);
         return data;
     } catch (e) {
         return thunkAPI.rejectWithValue(e.response && e.response.data ? e.response.data : e);
@@ -91,6 +93,9 @@ export const slice = createSlice({
         },
         setOrder: (state, action) => {
             state.order = action.payload;
+        },
+        setFilters: (state, action) => {
+            state.filters = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -158,6 +163,6 @@ export const slice = createSlice({
     },
 });
 
-export const { setPage, setQty, setOrder } = slice.actions;
+export const { setPage, setQty, setOrder, setFilters } = slice.actions;
 
 export default slice.reducer;

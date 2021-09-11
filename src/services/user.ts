@@ -12,8 +12,14 @@ const httpClient = new HttpClient();
  */
 
 export default class UserService {
-    static async getAll(page: number = 1, qty: number = 25, order = 'alfabetica'): Promise<any> {
-        const url = `/admin/usuarios?page=${page}&quantidade=${qty}&ordem=${order}`;
+    static async getAll(page: number = 1, qty: number = 25, order = 'alfabetica', filters: any = null): Promise<any> {
+        let url = `/admin/usuarios?page=${page}&quantidade=${qty}&ordem=${order}`;
+        if (filters && typeof filters === 'object') {
+            Object.entries(filters).map((filter) => {
+                url = `${url}&${filter[0]}=${filter[1]}`;
+            });
+        }
+        console.log(url);
         const res = await httpClient.get(url);
         return res;
     }

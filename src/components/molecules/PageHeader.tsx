@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Input, InputGroup, Spinner } from 'reactstrap';
+import { Button, Input, InputGroup, Spinner } from 'reactstrap';
 
 type Props = {
     loading?: boolean;
@@ -14,6 +14,8 @@ type Props = {
         value: string | number;
     }[];
     handleSort?: Function;
+    hasFilter?: boolean;
+    onFilterPress?: Function;
 };
 
 export default function PageHeader(props: Props) {
@@ -27,6 +29,8 @@ export default function PageHeader(props: Props) {
         sortable,
         sortableOptions,
         handleSort,
+        hasFilter,
+        onFilterPress,
     } = props;
 
     function renderActions() {
@@ -41,6 +45,12 @@ export default function PageHeader(props: Props) {
                     </span>
                 );
             });
+        }
+    }
+
+    function handleFilterPress() {
+        if (onFilterPress) {
+            onFilterPress();
         }
     }
 
@@ -82,6 +92,11 @@ export default function PageHeader(props: Props) {
                                     </option>
                                 ))}
                             </Input>
+                        ) : null}
+                        {hasFilter ? (
+                            <Button color="light" className="border ml-1" onClick={handleFilterPress}>
+                                <i className="bi bi-funnel"></i>
+                            </Button>
                         ) : null}
                     </div>
                 </div>

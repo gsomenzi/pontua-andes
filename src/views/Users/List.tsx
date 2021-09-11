@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    Button,
     ButtonDropdown,
     ButtonGroup,
     DropdownItem,
@@ -10,15 +9,35 @@ import {
     DropdownToggle,
     Table,
     Spinner,
+    FormGroup,
+    Label,
+    Col,
+    Row,
 } from 'reactstrap';
 import BreadCrumbs from '../../components/atoms/BreadCrumbs';
 import PageContainer from '../../components/atoms/PageContainer';
 import Drawer from '../../components/molecules/Drawer';
 import PageHeader from '../../components/molecules/PageHeader';
 import { RootState } from '../../store';
-import { getAll, search, setPage, setOrder, remove } from '../../store/slices/user';
+import { getAll, search, setPage, setOrder, remove, setFilters } from '../../store/slices/user';
 import ConfirmDialog from '../../components/molecules/ConfirmDialog';
 import Pagination from '../../components/organisms/Layout/Pagination';
+import Select from 'react-select';
+
+const genreOptions = [
+    { value: 'masculino', label: 'Masculino' },
+    { value: 'feminino', label: 'Feminino' },
+    { value: 'outro', label: 'Outro' },
+];
+
+const scholarityOptions = [
+    { value: 'ensino-fundamental-incompleto', label: 'Ensino fundamental incompleto' },
+    { value: 'ensino-fundamental', label: 'Ensino fundamental' },
+    { value: 'ensino-medio-incompleto', label: 'Ensino médio incompleto' },
+    { value: 'ensino-medio', label: 'Ensino médio' },
+    { value: 'ensino-superior-incompleto', label: 'Ensino superior incompleto' },
+    { value: 'ensino-superior', label: 'Ensino superior' },
+];
 
 /**
  * Breadcrumbs no topo da página
@@ -29,19 +48,38 @@ const breadCrumbItems = [{ title: 'Usuários' }];
  * Página de usuários do Pontua
  */
 export default function Users() {
+    const [showFilters, setShowFilters] = useState(false);
+    const [genreFilter, setGenreFilter] = useState<any>(null);
+    const [scholarityFilter, setScholarityFilter] = useState<any>(null);
     const [showRemoveModal, setShowRemoveModal] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
     const [selected, setSelected] = useState({ id: 0 });
     const [openActionDropdown, setOpenActionDropdown] = useState();
     const dispatch = useDispatch();
-    const { getting, removing, items, error, pagination, order } = useSelector((state: RootState) => state.user);
+    const { getting, removing, items, error, pagination, order, filters } = useSelector(
+        (state: RootState) => state.user
+    );
 
     /**
      * Busca todos os usuários ao montar a página
      */
     useEffect(() => {
         dispatch(getAll());
-    }, [dispatch, pagination.page, order]);
+    }, [dispatch, pagination.page, order, filters]);
+
+    /**
+     * Ao alterar select de filtros, altera filtros no state
+     */
+    useEffect(() => {
+        if (genreFilter || scholarityFilter) {
+            const f: any = {};
+            if (genreFilter) f.sexo = genreFilter.value;
+            if (scholarityFilter) f.escolaridade = scholarityFilter.value;
+            dispatch(setFilters(f));
+        } else {
+            dispatch(setFilters(null));
+        }
+    }, [scholarityFilter, genreFilter]);
 
     /**
      * Seleciona o usuário e mostra dropdown de mais do item
@@ -68,23 +106,6 @@ export default function Users() {
     }
 
     /**
-     * Desmarca item selecionado e abre o drawer
-     */
-    async function openAdd() {
-        await setSelected({ id: 0 });
-        setOpenDrawer(true);
-    }
-
-    /**
-     * Seleciona um usuário e abre o drawer para edição
-     * @param item Usuário a ser selecionado
-     */
-    async function openEdit(item: any) {
-        await setSelected(item);
-        setOpenDrawer(true);
-    }
-
-    /**
      * Seleciona um usuário e abre modal para confirmar a remoção
      * @param e Evento do link a ser cancelado
      * @param item Usuário a ser selecionado
@@ -94,14 +115,6 @@ export default function Users() {
         setSelected(item);
         setShowRemoveModal(true);
     }
-
-    // function submit(values: any) {
-    //     if (selected && selected.id) {
-    //         dispatch(update({ ...values, id: selected.id }));
-    //     } else {
-    //         dispatch(create(values));
-    //     }
-    // }
 
     /**
      * Renderiza os itens na tabela de usuários
@@ -181,7 +194,39 @@ export default function Users() {
                     { value: 'pontos-desc', label: 'Pontos ⬇' },
                 ]}
                 handleSort={handleSort}
+                hasFilter
+                onFilterPress={() => setShowFilters(!showFilters)}
             />
+            {/* FILTROS */}
+            {showFilters ? (
+                <div className="p-2 mb-3 rounded border">
+                    <Row>
+                        <Col>
+                            <FormGroup>
+                                <Label>Sexo</Label>
+                                <Select
+                                    isClearable
+                                    options={genreOptions}
+                                    onChange={setGenreFilter}
+                                    placeholder="Selecione..."
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col>
+                            <FormGroup>
+                                <Label>Escolaridade</Label>
+                                <Select
+                                    isClearable
+                                    options={scholarityOptions}
+                                    onChange={setScholarityFilter}
+                                    placeholder="Selecione..."
+                                />
+                            </FormGroup>
+                        </Col>
+                    </Row>
+                </div>
+            ) : null}
+            {/* TABELA */}
             <Table bordered striped hover responsive>
                 <thead>
                     <tr>
