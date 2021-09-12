@@ -3,6 +3,10 @@ interface EstablishmentStatisticData {
         hoje: number;
         total: number;
     };
+    pontos: {
+        hoje: number;
+        total: number;
+    };
     produtos: {
         ativos: number;
     };

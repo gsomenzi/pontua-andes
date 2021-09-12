@@ -1,11 +1,12 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
+import { Card, CardHeader, CardTitle, CardBody, Row, Col } from 'reactstrap';
 import HistoryChart from './HistoryChart';
 import UserPerSexChart from './UserPerSexChart';
 import UserPerAgeChart from './UserPerAgeChart';
 import MostScoresUsersTable from './MostScoresUsersTable';
 import LessScoresUsersTable from './LessScoresUsersTable';
 import TopScoresUsersTable from './TopScoresUsersTable';
+import StatisticCard from '../../molecules/StatisticCard';
 
 type Props = {
     data: EstablishmentStatisticData | null;
@@ -13,9 +14,51 @@ type Props = {
 
 export function TabDashboard(props: Props) {
     const { data } = props;
+    console.log('DATA', data);
     return (
         <div>
-            {/* CONTEUDO PRINCIPAL */}
+            {/* CARDS */}
+            <div className="py-1">
+                <Row>
+                    <Col lg={3} md={6} sm={6} xs={6}>
+                        <StatisticCard
+                            title="Pontos"
+                            iconName="hand-index"
+                            color="primary"
+                            value={`${data?.pontos?.total}`}
+                            extra={`+${data?.pontos?.hoje} hoje`}
+                        />
+                    </Col>
+                    <Col lg={3} md={6} sm={6} xs={6}>
+                        <StatisticCard
+                            title="Pontuações"
+                            iconName="bar-chart"
+                            color="secondary"
+                            value={`${data?.pontuacoes?.total}`}
+                            extra={`+${data?.pontuacoes?.hoje} hoje`}
+                        />
+                    </Col>
+                    <Col lg={3} md={6} sm={6} xs={6}>
+                        <StatisticCard
+                            title="Resg. prêmios"
+                            iconName="percent"
+                            color="tertiary"
+                            value={`${data?.resgates_produtos?.total}`}
+                            extra={`+${data?.resgates_produtos?.hoje} hoje`}
+                        />
+                    </Col>
+                    <Col lg={3} md={6} sm={6} xs={6}>
+                        <StatisticCard
+                            title="Resg. cupons"
+                            iconName="tags"
+                            color="primary"
+                            value={`${data?.resgates_vouchers?.total}`}
+                            extra={`+${data?.resgates_vouchers?.hoje} hoje`}
+                        />
+                    </Col>
+                </Row>
+            </div>
+            {/* HISTORICO */}
             <Card className="mt-2 mb-2">
                 <CardHeader>
                     <CardTitle>Histórico</CardTitle>
