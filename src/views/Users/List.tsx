@@ -13,6 +13,7 @@ import {
     Label,
     Col,
     Row,
+    Tooltip,
 } from 'reactstrap';
 import BreadCrumbs from '../../components/atoms/BreadCrumbs';
 import PageContainer from '../../components/atoms/PageContainer';
@@ -43,6 +44,41 @@ const scholarityOptions = [
  * Breadcrumbs no topo da página
  */
 const breadCrumbItems = [{ title: 'Usuários' }];
+
+function UserId(props: { user: any }) {
+    const { user } = props;
+    const [tooltipOpen, setTooltipOpen] = useState(false);
+    const toggle = () => setTooltipOpen(!tooltipOpen);
+
+    return (
+        <div className="d-flex align-items-center">
+            {user.perfil ? (
+                <div className="mr-2">
+                    <img className="user-avatar" src={user.perfil.avatar} />
+                </div>
+            ) : null}
+            <Link to={`/usuarios/${user.id}`}>
+                <p className="mt-0 mb-0 font-weight-bold">
+                    {user.nome}
+                    {user.aniversariante ? (
+                        <>
+                            <i id={`birthdayIcon${user.id}`} className="bi bi-gift text-secondary ml-1"></i>
+                            <Tooltip
+                                placement="right"
+                                isOpen={tooltipOpen}
+                                target={`birthdayIcon${user.id}`}
+                                toggle={toggle}
+                            >
+                                Aniversariante
+                            </Tooltip>
+                        </>
+                    ) : null}
+                </p>
+                <p className="mt-0 mb-0">{user.email}</p>
+            </Link>
+        </div>
+    );
+}
 
 /**
  * Página de usuários do Pontua
@@ -128,17 +164,7 @@ export default function Users() {
                         <td className="compact">{i + 1}</td>
                         {/* NOME e EMAIL */}
                         <td>
-                            <div className="d-flex align-items-center">
-                                {item.perfil ? (
-                                    <div className="mr-2">
-                                        <img className="user-avatar" src={item.perfil.avatar} />
-                                    </div>
-                                ) : null}
-                                <Link to={`/usuarios/${item.id}`}>
-                                    <p className="mt-0 mb-0 font-weight-bold">{item.nome}</p>
-                                    <p className="mt-0 mb-0">{item.email}</p>
-                                </Link>
-                            </div>
+                            <UserId user={item} />
                         </td>
                         {/* SEXO */}
                         <td className="compact">{item.nome_sexo || 'Não informado'}</td>
