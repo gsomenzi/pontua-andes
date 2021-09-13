@@ -14,6 +14,7 @@ import {
     Col,
     Row,
     Tooltip,
+    Input,
 } from 'reactstrap';
 import BreadCrumbs from '../../components/atoms/BreadCrumbs';
 import PageContainer from '../../components/atoms/PageContainer';
@@ -86,6 +87,7 @@ function UserId(props: { user: any }) {
 export default function Users() {
     const [showFilters, setShowFilters] = useState(false);
     const [genreFilter, setGenreFilter] = useState<any>(null);
+    const [birthdayFilter, setBirthdayFilter] = useState(false);
     const [scholarityFilter, setScholarityFilter] = useState<any>(null);
     const [showRemoveModal, setShowRemoveModal] = useState(false);
     const [openDrawer, setOpenDrawer] = useState(false);
@@ -107,15 +109,16 @@ export default function Users() {
      * Ao alterar select de filtros, altera filtros no state
      */
     useEffect(() => {
-        if (genreFilter || scholarityFilter) {
+        if (genreFilter || scholarityFilter || birthdayFilter) {
             const f: any = {};
             if (genreFilter) f.sexo = genreFilter.value;
             if (scholarityFilter) f.escolaridade = scholarityFilter.value;
+            if (birthdayFilter) f.aniversariante = true;
             dispatch(setFilters(f));
         } else {
             dispatch(setFilters(null));
         }
-    }, [scholarityFilter, genreFilter]);
+    }, [scholarityFilter, genreFilter, birthdayFilter]);
 
     /**
      * Seleciona o usuário e mostra dropdown de mais do item
@@ -226,8 +229,8 @@ export default function Users() {
             {/* FILTROS */}
             {showFilters ? (
                 <div className="p-2 mb-3 rounded border">
-                    <Row>
-                        <Col>
+                    <Row className="align-items-center">
+                        <Col xs={12} sm={12} md={4} lg={4}>
                             <FormGroup>
                                 <Label>Sexo</Label>
                                 <Select
@@ -238,7 +241,7 @@ export default function Users() {
                                 />
                             </FormGroup>
                         </Col>
-                        <Col>
+                        <Col xs={12} sm={12} md={4} lg={4}>
                             <FormGroup>
                                 <Label>Escolaridade</Label>
                                 <Select
@@ -247,6 +250,14 @@ export default function Users() {
                                     onChange={setScholarityFilter}
                                     placeholder="Selecione..."
                                 />
+                            </FormGroup>
+                        </Col>
+                        <Col xs={12} sm={12} md={4} lg={4}>
+                            <FormGroup className="d-flex align-items-center mb-0 mt-2">
+                                <Label check>
+                                    <Input type="checkbox" onChange={(e) => setBirthdayFilter(e.target.checked)} />{' '}
+                                    Apenas aniversariantes
+                                </Label>
                             </FormGroup>
                         </Col>
                     </Row>
