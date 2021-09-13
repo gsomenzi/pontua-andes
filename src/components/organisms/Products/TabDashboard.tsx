@@ -1,10 +1,11 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap';
+import { Card, CardHeader, CardTitle, CardBody, Row, Col } from 'reactstrap';
 import HistoryChart from './HistoryChart';
 import TopCitiesChart from './TopCitiesChart';
 import TopWeekdaysChart from './TopWeekdaysChart';
 import LastScoresTable from './LastScoresTable';
 import MostScoresUsersTable from './MostScoresUsersTable';
+import StatisticCard from '../../molecules/StatisticCard';
 
 type Props = {
     data: ProductStatisticData;
@@ -14,6 +15,20 @@ export function TabDashboard(props: Props) {
     const { data } = props;
     return (
         <div>
+            {/* CARDS */}
+            <div className="py-1">
+                <Row>
+                    <Col lg={3} md={6} sm={6} xs={6}>
+                        <StatisticCard
+                            title="Resgates"
+                            iconName="percent"
+                            color="primary"
+                            value={`${data?.totalResgates}`}
+                            extra={`+${data?.resgatesHoje} hoje`}
+                        />
+                    </Col>
+                </Row>
+            </div>
             {/* CONTEUDO PRINCIPAL */}
             <Card className="mt-2 mb-2">
                 <CardHeader>

@@ -70,6 +70,9 @@ const schema = Yup.object().shape({
     regras: Yup.string().required('Por favor insira as regras'),
     dias_expiracao_pontos: Yup.number().required('Por favor selecione o tempo de expiração dos pontos'),
     status: Yup.string().required('Por favor selecione um status').oneOf(['ativo', 'inativo']),
+    facebook: Yup.string().url('Por favor insira uma URL válida'),
+    instagram: Yup.string().url('Por favor insira uma URL válida'),
+    site: Yup.string().url('Por favor insira uma URL válida'),
 });
 
 /**
@@ -278,8 +281,19 @@ export default function Form(props: Props) {
                             onBlur={handleBlur('facebook')}
                             onChange={handleChange('facebook')}
                             invalid={!!(formErrors.facebook && touched.facebook)}
+                            placeholder="Copie e cole a URL do seu perfil"
                         />
                         <FormFeedback>{formErrors.facebook}</FormFeedback>
+                        {!formErrors.facebook ? (
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary"
+                                href={values.facebook}
+                            >
+                                Clique para testar o link
+                            </a>
+                        ) : null}
                     </FormGroup>
                     {/* INSTAGRAM */}
                     <FormGroup>
@@ -289,8 +303,19 @@ export default function Form(props: Props) {
                             onBlur={handleBlur('instagram')}
                             onChange={handleChange('instagram')}
                             invalid={!!(formErrors.instagram && touched.instagram)}
+                            placeholder="Copie e cole a URL do seu perfil"
                         />
                         <FormFeedback>{formErrors.instagram}</FormFeedback>
+                        {!formErrors.instagram ? (
+                            <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary"
+                                href={values.instagram}
+                            >
+                                Clique para testar o link
+                            </a>
+                        ) : null}
                     </FormGroup>
                     {/* SITE */}
                     <FormGroup>
@@ -300,8 +325,14 @@ export default function Form(props: Props) {
                             onBlur={handleBlur('site')}
                             onChange={handleChange('site')}
                             invalid={!!(formErrors.site && touched.site)}
+                            placeholder="Copie e cole a URL"
                         />
                         <FormFeedback>{formErrors.site}</FormFeedback>
+                        {!formErrors.site ? (
+                            <a target="_blank" rel="noopener noreferrer" className="text-primary" href={values.site}>
+                                Clique para testar o link
+                            </a>
+                        ) : null}
                     </FormGroup>
                     <div className="text-right">
                         <ButtonGroup>

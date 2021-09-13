@@ -14,7 +14,6 @@ type Props = {
 
 export function TabDashboard(props: Props) {
     const { data } = props;
-    console.log('DATA', data);
     return (
         <div>
             {/* CARDS */}
